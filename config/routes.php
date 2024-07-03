@@ -62,6 +62,11 @@ return function (RouteBuilder $routes): void {
          */
         $builder->connect('/pages/*', 'Pages::display');
 
+        /**
+         * indexページを表示するルーター設定
+         */
+        $builder->connect('/index', ['controller' => 'MainPage', 'action' => 'index'])->setMethods(['GET']);
+
         /*
          * Connect catchall routes for all controllers.
          *

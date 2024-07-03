@@ -82,10 +82,12 @@ th {
     max-width: 112rem;
     padding: 2rem;
     margin: 0 auto 2rem;
+    background-color: #FFF0F5;
 }
 .top-nav-title a {
     font-size: 2.4rem;
-    color: #d33c43;
+    /* color: #d33c43; */
+    color: #00BFFF;
 }
 .top-nav-title span {
     color: #404041;
