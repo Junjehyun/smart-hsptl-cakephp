@@ -1,0 +1,26 @@
+{
+  "name": "smart_hospital_cakephp",
+  "version": "1.0.0",
+  "description": "![Build Status](https://github.com/cakephp/app/actions/workflows/ci.yml/badge.svg?branch=master) [![Total Downloads](https://img.shields.io/packagist/dt/cakephp/app.svg?style=flat-square)](https://packagist.org/packages/cakephp/app) [![PHPStan](https://img.shields.io/badge/PHPStan-level%207-brightgreen.svg?style=flat-square)](https://github.com/phpstan/phpstan)",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "build:css": "tailwindcss build src/styles/tailwind.css -o webroot/css/tailwind.css",
+    "watch:css": "tailwindcss build src/styles/tailwind.css -o webroot/css/tailwind.css --watch",
+    "browsersync": "browser-sync start --config bs-config.js",
+    "dev": "npm-run-all --parallel watch:css browsersync",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "tailwindcss": "^3.4.4"
+  },
+  "devDependencies": {
+    "browser-sync": "^3.0.2",
+    "npm-run-all": "^4.1.5"
+  }
+}
