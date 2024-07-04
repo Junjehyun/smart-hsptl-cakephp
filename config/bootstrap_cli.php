@@ -16,6 +16,9 @@ declare(strict_types=1);
  */
 
 use Cake\Core\Configure;
+use App\Command\ListCustomersCommand;
+use Cake\Console\CommandCollection;
+
 
 /*
  * Additional bootstrapping and configuration for CLI environments should
@@ -33,3 +36,8 @@ if (Configure::check('Log.debug')) {
 if (Configure::check('Log.error')) {
     Configure::write('Log.error.file', 'cli-error');
 }
+
+return static function (CommandCollection $commands) {
+    $commands->add('list_customers', ListCustomersCommand::class);
+    return $commands;
+};

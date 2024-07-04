@@ -22,7 +22,6 @@ class MainPageController extends AppController
         /**
          * コントローラー名とビューのフォルダが一緒の場合、
          * 特に何も指定しなくても自動的にビューが表示される
-         * すごいじゃん？
          */
     }
 

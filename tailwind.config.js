@@ -6,7 +6,11 @@ module.exports = {
     './webroot/js/**/*.js',
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        jp: ['Zen Maru Gothic', 'sans-serif'], // 日本語フォント
+      },
+    },
   },
   plugins: [],
 }
