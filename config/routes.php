@@ -72,6 +72,13 @@ return function (RouteBuilder $routes): void {
          */
         $builder->connect('/kanjaList', ['controller' => 'KanjaList', 'action' => 'kanjaList'])->setMethods(['GET']);
 
+        /**
+         * CSV Masterデータを取得するルーター設定
+         */
+        $builder->connect('/csv-upload', ['controller' => 'CsvUpload', 'action' => 'upload'])->setMethods(['GET', 'POST']);
+
+
+
         /*
          * Connect catchall routes for all controllers.
          *

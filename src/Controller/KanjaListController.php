@@ -20,8 +20,16 @@ class KanjaListController extends AppController {
         //検索クエリ
         $searchKanja = $this->request->getQuery('searchKanja');
 
+        //medical_infoテーブルからdepartment,doctor_nameカラムをLeftJoin
+        // $query = $customersTable->find()
+        //     ->select(['Customers.customer_no', 'Customers.name', 'Customers.sex', 'Customers.birthdate', 'Customers.room_code', 'Customers.blood_type', 'Customers.severity', 'Customers.fall', 'MedicalInfos.department', 'MedicalInfos.doctor_name'])
+        //     ->leftJoinWith('MedicalInfos', function ($q) {
+        //         return $q->where(['MedicalInfos.customer_no = Customers.customer_no']);
+        //     });
+        $query = $customersTable->find()->contain(['MedicalInfos']);
+
         //クエリ生成
-        $query = $customersTable->find('all');
+        //$query = $customersTable->find('all');
         
         if($searchKanja) {
             $query->where([

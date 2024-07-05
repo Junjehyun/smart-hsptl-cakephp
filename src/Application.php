@@ -74,6 +74,15 @@ class Application extends BaseApplication
      */
     public function middleware(MiddlewareQueue $middlewareQueue): MiddlewareQueue
     {
+        $csrf = new CsrfProtectionMiddleware([
+            'httponly' => true,
+        ]);
+    
+        // CSRF 보호를 건너뛸 경로를 설정
+        $csrf->skipCheckCallback(function ($request) {
+            return $request->getParam('controller') === 'CsvUpload' && $request->getParam('action') === 'upload';
+        });
+
         $middlewareQueue
             // Catch any exceptions in the lower layers,
             // and make an error page/response
@@ -97,10 +106,11 @@ class Application extends BaseApplication
 
             // Cross Site Request Forgery (CSRF) Protection Middleware
             // https://book.cakephp.org/4/en/security/csrf.html#cross-site-request-forgery-csrf-middleware
-            ->add(new CsrfProtectionMiddleware([
-                'httponly' => true,
-            ]));
-
+            // ->add(new CsrfProtectionMiddleware([
+            //     'httponly' => true,
+            ->add($csrf);
+            //]));
+            
         return $middlewareQueue;
     }
 

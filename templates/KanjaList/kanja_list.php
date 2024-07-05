@@ -1,6 +1,6 @@
 <?php $this->assign('title', '患者一覧'); ?>
 <a href="/kanjaList">
-    <h1 class="text-4xl font-bold text-center mt-5">患者検索</h1>
+    <h1 class="text-5xl font-bold text-center mt-5">患者検索</h1>
 </a>
 <div class="container flex justify-center max-w-8xl p-5 py-8">
     <div class="bg-white p-6 rounded-lg shadow space-y-3 w-full">
@@ -68,15 +68,19 @@
                             <td class="px-5 py-2 border-r text-center"><input type="checkbox"></td>
                             <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->customer_no) ?></td>
                             <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->name) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->sex) ?></td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= $customer->sex === 'M' ? '男' : '女' ?></td>
                             <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->birthdate) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">조인필요</td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">조인필요</td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->medical_info->department) ?></td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->medical_info->doctor_name) ?></td>
                             <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->room_code) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->blood_type) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->severity) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->fall) ?></td>
-                            <td class="px-5 py-2"></td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->blood_type) ?>型</td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->severity) ?>群</td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= $customer->fall === '0' ? '低危険群' : '高危険群' ?></td>
+                            <td class="px-5 py-2 text-center">
+                                <button type="button" class="bg-sky-400 hover:bg-sky-600 text-white font-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
+                                    修正
+                                </button>
+                            </td>
                         </tr>
                         <?php endforeach; ?>
                     </tbody>

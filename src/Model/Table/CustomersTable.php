@@ -40,6 +40,15 @@ class CustomersTable extends Table
         $this->setTable('customers');
         $this->setDisplayField('name');
         $this->setPrimaryKey('id');
+
+        /**
+         * MedicalInfosテーブルとのリレーション
+         */
+        $this->hasOne('MedicalInfos', [
+            'foreignKey' => 'customer_no',
+            'bindingKey' => 'customer_no',
+            'joinType' => 'LEFT',
+            ]);
     }
 
     /**
