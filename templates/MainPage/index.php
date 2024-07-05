@@ -7,7 +7,7 @@
                 <i class="fas fa-bell mr-2"></i> 患者検索
             </button>
         </a>
-        <a href="#">
+        <a href="/kanjaCreate">
             <button class="bg-sky-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
                 <i class="fas fa-search mr-2"></i> 患者登録
             </button>
