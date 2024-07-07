@@ -11,7 +11,7 @@
             </div>
             <div class="flex flex-col">
                 <label class="mb-1 text-sm text-gray-600">生年月日 <span class="text-red-500">必須</span></label>
-                토,일중 등록화면 반드시 끝내세요....
+                docker테스트123
             </div>
         </div>
     </div>

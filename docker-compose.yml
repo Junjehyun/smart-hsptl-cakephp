@@ -1,0 +1,6 @@
+services:
+  app:
+    image: smart_hsptl-ubuntu-postgres
+    volumes:
+    - /c/Users/ptsol/Desktop/workspace/project/CakePHP/smart_hospital_cakephp/smart_hospital_cakephp:/project
+    command: /bin/bash
