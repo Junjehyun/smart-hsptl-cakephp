@@ -27,12 +27,18 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <title>
         <?= $defaultTitle ?><?= $pageTitle ? ' - ' . $pageTitle : '' ?>
     </title>
+
+    <!-- jQuery CDN -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    
     <!--google fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100&family=Yomogi&family=Zen+Maru+Gothic:wght@300&display=swap" rel="stylesheet">
 
     <?= $this->Html->meta('icon') ?>
+
+    <?= $this->Flash->render() ?>
 
     <?= $this->Html->css(['normalize.min', 'milligram.min', 'fonts', 'cake']) ?>
 
@@ -50,6 +56,14 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
             font-family: 'Zen Maru Gothic', sans-serif;
         }
     </style>
+    <script>
+        setTimeout(function() {
+            var flashMessages = document.querySelectorAll('.alert');
+            flashMessages.forEach(function(message) {
+                message.style.display = 'none';
+            });
+        }, 5000); 
+    </script>
 </head>
 <body class="bg-white flex-grow p-6">
     <nav class="top-nav bg-sky-50 p-4 shadow-lg">

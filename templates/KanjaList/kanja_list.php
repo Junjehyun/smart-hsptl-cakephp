@@ -15,7 +15,7 @@
                 </div>
             </div> 
         </form>
-            <a href="#">
+            <a href="/kanjaCreate">
                 <button type="button" class="border-none bg-sky-400 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-15">
                     患者登録
                 </button>
@@ -28,10 +28,10 @@
                                 <input type="checkbox">
                             </th>
                             <th class="px-5 py-3 bg-sky-50 text-center text-m text-gray-600 tracking-tighter whitespace-nowrap">
-                                氏名
+                                患者番号
                             </th>
                             <th class="px-5 py-3 bg-sky-50 text-center text-m text-gray-600 tracking-tighter whitespace-nowrap">
-                                患者番号
+                                氏名
                             </th>
                             <th class="px-5 py-3 bg-sky-50 text-center text-m text-gray-600 tracking-tighter whitespace-nowrap">
                                 性別
@@ -65,17 +65,40 @@
                     <tbody>
                         <?php foreach ($customers as $customer): ?>
                         <tr class="hover:bg-gray-50 border-b">
-                            <td class="px-5 py-2 border-r text-center"><input type="checkbox"></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->customer_no) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->name) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= $customer->sex === 'M' ? '男' : '女' ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->birthdate) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->medical_info->department) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->medical_info->doctor_name) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->room_code) ?></td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->blood_type) ?>型</td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= h($customer->severity) ?>群</td>
-                            <td class="px-5 py-2 border-r text-center whitespace-nowrap"><?= $customer->fall === '0' ? '低危険群' : '高危険群' ?></td>
+                            <td class="px-5 py-2 border-r text-center">
+                                <input type="checkbox">
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($customer->customer_no) ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($customer->name) ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= $customer->sex === 'M' ? '男' : '女' ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($customer->birthdate) ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($departmentsList[$customer->medical_info->department] ?? $customer->medical_info->department) ?>
+
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($customer->medical_info->doctor_name) ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($customer->room_code) ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($bloodTypeList[$customer->blood_type] ?? $customer->blood_type) ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($severitiesList[$customer->severity] ?? $customer->severity) ?>
+                            </td>
+                            <td class="px-5 py-2 border-r text-center whitespace-nowrap">
+                                <?= h($fallsList[$customer->fall] ?? $customer->fall) ?>
+                            </td>
                             <td class="px-5 py-2 text-center">
                                 <button type="button" class="bg-sky-400 hover:bg-sky-600 text-white font-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
                                     修正
