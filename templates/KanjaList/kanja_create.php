@@ -132,9 +132,6 @@
         </div>
     </div>
     <div class="flex justify-end mt-4">
-        <!-- <button type="button" class="bg-sky-400 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-15 border-none">
-            登録する
-        </button> -->
         <?= $this->Form->button(__('登録する'), ['class' => 'bg-sky-400 hover:bg-blue-900 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-15 border-none']) ?>
     </div>
 <?= $this->Form->end() ?>

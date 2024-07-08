@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Controller;
 use Cake\Validation\Validator;
-use Cake\Validation\Validation;
 use Cake\ORM\TableRegistry;
 class KanjaListController extends AppController {
 
@@ -11,6 +10,8 @@ class KanjaListController extends AppController {
      * 患者一覧画面（検索機能含め）
      * 
      * @return \Cake\Http\Response|null 患者一覧画面
+     * @throws \Cake\Http\Exception\NotFoundException 患者が見つからない場合の例外
+     * @throws \Cake\Http\Exception\MethodNotAllowedException メソッドが許可されていない場合の例外
      */
     public function kanjaList() {
         // 患者一覧画面を表示
@@ -39,7 +40,7 @@ class KanjaListController extends AppController {
             'valueField' => 'item_name'
         ])->where(['master_key' => '003'])->toArray(); 
 
-         // 추가: departments 리스트 조회
+         // 診療科マスタを取得
         $departmentsList = $mastersTable->find('list', [
             'keyField' => 'item_code',
             'valueField' => 'item_name'
@@ -107,36 +108,24 @@ class KanjaListController extends AppController {
 
             $validator = new Validator();
             $validator
+                    //氏名
                     ->requirePresence('name', 'create')
                     ->notEmptyString('name', '氏名は必須項目です。')
                     ->maxLength('name', 10, '氏名は10文字以内で入力してください。');
+                    //生年月日
+                    //性別
+                    //入院日付
+                    //血液型
+                    //電話番号
+                    //診療科
+                    //担当医
+                    //重症度
+                    //落傷
 
             $errors = $validator->validate($data);
 
-            // if (empty($errors)) {
-            //     // 유효성 검사를 통과한 경우
-            //     $this->Flash->success(__('新しい患者が登録されました。'));
-            //     return $this->redirect(['action' => 'kanjaList']);
-            // } else {
-            //     // 유효성 검사 실패 시 오류 메시지 설정
-            //     //$this->Flash->error(__('入力内容に誤りがあります。もう一度確認してください。'));
-            //     $this->set('errors', $errors);
-            // }
-
-            // if ($customersTable->save($customer) && $medicalInfosTable->save($medicalInfo)) {
-
-            //         $this->Flash->success(__('新しい患者が登録されました。'));
-            //         return $this->redirect(['action' => 'kanjaList']);
-            //     } else {
-            //         // エラーメッセージを取得
-            //         $errors = $customer->getErrors();
-                    
-            //         $this->Flash->error(__('患者の登録に失敗しました。もう一度やり直してください。'));
-            //         //$this->set('errors', $customer->getErrors() + $medicalInfo->getErrors());
-            //         $this->set(compact('customer', 'medicalInfo'));
-            //     }
             if (empty($errors)) {
-                // 유효성 검사를 통과한 경우
+                // Validation検査を通過した場合
                 $customersTable = TableRegistry::getTableLocator()->get('Customers');
                 $medicalInfosTable = TableRegistry::getTableLocator()->get('MedicalInfos');
     
@@ -152,30 +141,33 @@ class KanjaListController extends AppController {
                 $medicalInfo = $medicalInfosTable->newEntity([
                     'customer_no' => $data['customer_no'],
                     'department' => $data['department'],
-                    'doctor_name' => $data['doctor_name'],
-                    'severity' => $data['severity'],
-                    'fall' => $data['fall']
+                    'doctor_name' => $data['doctor_name']
                 ]);
     
                 if ($customersTable->save($customer) && $medicalInfosTable->save($medicalInfo)) {
                     $this->Flash->success(__('新しい患者が登録されました。'));
                     return $this->redirect(['action' => 'kanjaList']);
                 } else {
-                    // 저장 실패 시 에러 메시지를 가져와서 뷰에 설정
+                    // 保存失敗時のエラーメッセージを取得してViewに設定
                     $errors = $customer->getErrors() + $medicalInfo->getErrors();
-                    $this->Flash->error(__('患者の登録に失敗しました。もう一度やり直してください。'));
+                    //$this->Flash->error(__('患者の登録に失敗しました。もう一度やり直してください。'));
                     $this->set('errors', $errors);
                 }
             } else {
-                // 유효성 검사 실패 시 오류 메시지 설정
-                $this->Flash->error(__('入力内容に誤りがあります。もう一度確認してください。'));
+                // validationエラーがある場合、エラーメッセージを取得してViewに設定
+                //$this->Flash->error(__('入力内容に誤りがあります。もう一度確認してください。'));
                 $this->set('errors', $errors);
             }
         }
 
-        // MastersTableを取得
+        /**
+         * マスタデータを取得
+         * @var mixed $bloodTypes 血液型マスタ
+         * @var mixed $departments 診療科マスタ
+         * @var mixed $severities 重症度マスタ
+         * @var mixed $falls 落傷マスタ
+         */
         $mastersTable = TableRegistry::getTableLocator()->get('Masters');
-
         // 血液型マスタを取得
         $bloodTypes = $mastersTable->find('all')
                                     ->where(['master_key' => '003', 'use_flag' => true, 'item_name !=' => '000'])
@@ -196,7 +188,6 @@ class KanjaListController extends AppController {
                             ->where(['master_key' => '009', 'use_flag' => true, 'item_name !=' => '000'])
                             ->order(['item_nm_short' => 'ASC'])
                             ->toArray();
-        
         // Viewにデータを渡す
         $this->set(compact('bloodTypes', 'departments', 'severities', 'falls'));
     
