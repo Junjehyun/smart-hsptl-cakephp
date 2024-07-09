@@ -78,6 +78,14 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/kanjaCreate', ['controller' => 'KanjaList', 'action' => 'kanjaCreate'])->setMethods(['GET', 'POST']);
 
         /**
+         * 患者詳細画面を表示するルーター設定
+         */
+        $builder->connect('/kanjaShow/:customer_no', ['controller' => 'KanjaList', 'action' => 'kanjaShow'])
+        ->setPass(['customer_no'])
+        ->setPatterns(['customer_no' => '[A-Za-z0-9]+'])
+        ->setMethods(['GET']);
+        
+        /**
          * CSV Masterデータを取得するルーター設定
          */
         $builder->connect('/csv-upload', ['controller' => 'CsvUpload', 'action' => 'upload'])->setMethods(['GET', 'POST']);

@@ -17,7 +17,8 @@
                     <?= $this->Form->control('name', [
                         'label' => false,
                         'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400',
-                        'placeholder' => '氏名'
+                        'placeholder' => '氏名',
+                        'value' => $data['name'] ?? ''
                     ]) ?>
                     <?php if (!empty($errors['name'])): ?>
                         <?php foreach ($errors['name'] as $error): ?>
@@ -35,36 +36,75 @@
                         <select id="day" name="birth_day" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-1/4">
                         </select>
                     </div>
+                    <?php if (!empty($errors['birthdate'])): ?>  
+                        <?php foreach ($errors['birthdate'] as $error): ?>  
+                            <div class="text-red-500"><?= h($error) ?></div>  
+                        <?php endforeach; ?>  
+                    <?php endif; ?>  
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">性別 <span class="text-red-500">必須</span></label>
                     <div class="flex space-x-4">
                         <label class="inline-flex items-center">
-                            <input type="radio" name="sex" value="M" class="form-radio">
+                            <input type="radio" name="sex" value="M" class="form-radio" <?= isset($data['sex']) && $data['sex'] === 'M' ? 'checked' : '' ?>>
                             <span class="ml-2">男</span>
                         </label>
                         <label class="inline-flex items-center">
-                            <input type="radio" name="sex" value="F" class="form-radio">
+                            <input type="radio" name="sex" value="F" class="form-radio" <?= isset($data['sex']) && $data['sex'] === 'F' ? 'checked' : '' ?>>
                             <span class="ml-2">女</span>
                         </label>
+                        <?php if (!empty($errors['sex'])): ?>
+                            <?php foreach ($errors['sex'] as $error): ?>
+                                <div class="text-red-500"><?= h($error) ?></div>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
                     </div>
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">入院日付 <span class="text-red-500">必須</span></label>
-                    <input type="text" id="hospital_date" name="hospital_date" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="入院日選択(YYYY-MM-DD)">
+                    <?= $this->Form->control('hospital_date', [
+                        'label' => false,
+                        'type' => 'date',
+                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400',
+                        'placeholder' => '入院日選択(YYYY-MM-DD)',
+                        'value' => $data['hospital_date'] ?? ''
+                    ]) ?>
+                    <?php if (!empty($errors['hospital_date'])): ?>
+                        <?php foreach ($errors['hospital_date'] as $error): ?>
+                            <div class="text-red-500"><?= h($error) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class=""flex flex-col>
                     <label class="mb-1 text-sm text-gray-600">血液型 <span class="text-red-500">必須</span></label>
                     <select name="blood_type" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                         <option>※選択して下さい</option>
                         <?php foreach ($bloodTypes as $bloodType): ?>
-                            <option value="<?= h($bloodType->item_code) ?>"><?= h($bloodType->item_name) ?></option>
+                            <option value="<?= h($bloodType->item_code) ?>" <?= isset($data['blood_type']) && $data['blood_type'] === $bloodType->item_code ? 'selected' : '' ?>>
+                                <?= h($bloodType->item_name) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
+                    <?php if (!empty($errors['blood_type'])): ?>
+                        <?php foreach ($errors['blood_type'] as $error): ?>
+                            <div class="text-red-500"><?= h($error) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">電話番号 <span class="text-red-500">必須</span></label>
-                    <input name="telephone" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" placeholder="電話番号">
+                    <!-- <input name="telephone" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" placeholder="電話番号"> -->
+                    <?= $this->Form->control('telephone', [
+                        'label' => false,
+                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400',
+                        'placeholder' => '電話番号',
+                        'value' => $data['telephone'] ?? ''
+                    ]) ?>
+                    <?php if (!empty($errors['telephone'])): ?>
+                        <?php foreach ($errors['telephone'] as $error): ?>
+                            <div class="text-red-500"><?= h($error) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="flex flex-col col-span-2">
                     <label class="mb-1 text-sm text-gray-600">住所</label>
@@ -81,31 +121,63 @@
                     <select name="department" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                         <option>※選択して下さい</option>
                         <?php foreach ($departments as $department): ?>
-                            <option value="<?= h($department->item_code) ?>"><?= h($department->item_name) ?></option>
+                            <option value="<?= h($department->item_code) ?>" <?= isset($data['department']) && $data['department'] === $department->item_code ? 'selected' : '' ?>>
+                                <?= h($department->item_name) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
+                    <?php if (!empty($errors['department'])): ?>
+                        <?php foreach ($errors['department'] as $error): ?>
+                            <div class="text-red-500"><?= h($error) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">担当医名 <span class="text-red-500">必須</span></label>
-                    <input name="doctor_name" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" placeholder="担当医名">
+                    <!-- <input name="doctor_name" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" placeholder="担当医名"> -->
+                    <?= $this->Form->control('doctor_name', [
+                        'label' => false,
+                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400',
+                        'placeholder' => '担当医名',
+                        'value' => $data['doctor_name'] ?? ''
+                    ]) ?>
+                    <?php if (!empty($errors['doctor_name'])): ?>
+                        <?php foreach ($errors['doctor_name'] as $error): ?>
+                            <div class="text-red-500"><?= h($error) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">重症度 <span class="text-red-500">必須</span></label>
                     <select name="severity" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                         <option>※選択して下さい</option>
                         <?php foreach ($severities as $severity): ?>
-                            <option value="<?= h($severity->item_code) ?>"><?= h($severity->item_nm_short) ?></option>
+                            <option value="<?= h($severity->item_code) ?>" <?= isset($data['severity']) && $data['severity'] === $severity->item_code ? 'selected' : '' ?>>
+                                <?= h($severity->item_nm_short) ?>
+                            </option>
                         <?php endforeach; ?>
                     </select>
+                    <?php if (!empty($errors['severity'])): ?>
+                        <?php foreach ($errors['severity'] as $error): ?>
+                            <div class="text-red-500"><?= h($error) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">落傷 <span class="text-red-500">必須</span></label>
                     <select name="fall" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                         <option>※選択して下さい</option>
                             <?php foreach ($falls as $fall): ?>
-                                <option value="<?= h($fall->item_code) ?>"><?= h($fall->item_nm_short) ?></option>
+                                <option value="<?= h($fall->item_code) ?>" <?= isset($data['fall']) && $data['fall'] === $fall->item_code ? 'selected' : '' ?>>
+                                    <?= h($fall->item_nm_short) ?>
+                                </option>
                             <?php endforeach; ?>
                     </select>
+                    <?php if (!empty($errors['fall'])): ?>
+                        <?php foreach ($errors['fall'] as $error): ?>
+                            <div class="text-red-500"><?= h($error) ?></div>
+                        <?php endforeach; ?>
+                    <?php endif; ?>
                 </div>
                 <div class="flex flex-col col-span-2">
                     <label class="mb-1 text-sm text-gray-600">注意事項</label>
@@ -141,6 +213,11 @@
         const yearSelect = document.getElementById('year');
         const monthSelect = document.getElementById('month');
         const daySelect = document.getElementById('day');
+
+        // 入力値を残す
+        const birthYear = <?= json_encode($data['birth_year'] ?? '') ?>;  
+        const birthMonth = <?= json_encode($data['birth_month'] ?? '') ?>;  
+        const birthDay = <?= json_encode($data['birth_day'] ?? '') ?>;  
 
         // 初期Optionのバリュー
         yearSelect.innerHTML = '<option value="">年</option>';
@@ -200,6 +277,11 @@
                 dateInput.type = 'text';
                 dateInput.placeholder = "入院日選択(YYYY-MM-DD)";
         });
+
+        // 入力値を残す
+        if (birthYear) yearSelect.value = birthYear;
+        if (birthMonth) monthSelect.value = birthMonth;
+        if (birthDay) daySelect.value = birthDay;
 
     });
 </script>

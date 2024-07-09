@@ -72,7 +72,9 @@
                                 <?= h($customer->customer_no) ?>
                             </td>
                             <td class="px-5 py-2 border-r text-center whitespace-nowrap">
-                                <?= h($customer->name) ?>
+                                <a href="<?= $this->Url->build(['action' => 'kanjaShow', $customer->customer_no]) ?>" class="text-blue-500 hover:underline">
+                                    <?= h($customer->name) ?>
+                                </a>
                             </td>
                             <td class="px-5 py-2 border-r text-center whitespace-nowrap">
                                 <?= $customer->sex === 'M' ? '男' : '女' ?>
