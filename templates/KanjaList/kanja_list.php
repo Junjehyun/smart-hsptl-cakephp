@@ -102,9 +102,11 @@
                                 <?= h($fallsList[$customer->fall] ?? $customer->fall) ?>
                             </td>
                             <td class="px-5 py-2 text-center">
-                                <button type="button" class="bg-sky-400 hover:bg-sky-600 text-white font-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
-                                    修正
-                                </button>
+                                <a href="<?= $this->Url->build(['controller' => 'KanjaList', 'action' => 'kanjaEdit', $customer->customer_no]) ?>">
+                                    <button type="button" class="bg-sky-400 hover:bg-sky-600 text-white font-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
+                                        修正
+                                    </button>
+                                </a>
                             </td>
                         </tr>
                         <?php endforeach; ?>

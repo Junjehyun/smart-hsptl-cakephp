@@ -27,7 +27,7 @@ class CreateCustomers extends AbstractMigration
         ->addColumn('blood_type', 'string', ['limit' => 2, 'null' => true])
         ->addColumn('severity', 'string', ['limit' => 8, 'null' => true])
         ->addColumn('fall', 'string', ['limit' => 8, 'null' => true])
-        ->addColumn('hospitalized_date', 'datetime', ['null' => true])
+        ->addColumn('hospitalized_date', 'date', ['null' => true])
         ->addColumn('remarks', 'text', ['null' => true])
         ->addColumn('old_ward_code', 'string', ['limit' => 10, 'null' => true])
         ->addColumn('old_room_code', 'string', ['limit' => 10, 'null' => true])

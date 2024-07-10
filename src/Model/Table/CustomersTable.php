@@ -122,9 +122,17 @@ class CustomersTable extends Table
             ->maxLength('fall', 8)
             ->allowEmptyString('fall');
 
+        // $validator
+        //     ->dateTime('hospitalized_date')
+        //     ->allowEmptyDateTime('hospitalized_date');
         $validator
-            ->dateTime('hospitalized_date')
-            ->allowEmptyDateTime('hospitalized_date');
+        ->date('hospitalized_date')
+        ->requirePresence('hospitalized_date', 'create')
+        ->notEmptyDate('hospitalized_date', '入院日は必須項目です。')
+        ->add('hospitalized_date', 'validDate', [
+            'rule' => 'date',
+            'message' => '有効な日付を入力してください。'
+        ]);
 
         $validator
             ->scalar('remarks')

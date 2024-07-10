@@ -66,6 +66,8 @@ class KanjaListController extends AppController {
             $data = $this->request->getData();
             // 生年月日を結合
             $data['birthdate'] = $data['birth_year'] . sprintf('%02d', $data['birth_month']) . sprintf('%02d', $data['birth_day']);
+
+            //dd($data);
             //customersテーブルを取得
             $customersTable = TableRegistry::getTableLocator()->get('Customers');
             $medicalInfosTable = TableRegistry::getTableLocator()->get('MedicalInfos');
@@ -138,9 +140,9 @@ class KanjaListController extends AppController {
                         'message' => '性別は男性か女性を選択してください。'
                     ])
                     //入院日付
-                    ->requirePresence('hospital_date', 'create', '入院日は必須項目です。')
-                    ->notEmptyString('hospital_date', '入院日は必須項目です。')
-                    ->add('hospital_date', 'validDate', [
+                    ->requirePresence('hospitalized_date', 'create', '入院日は必須項目です。')
+                    ->notEmptyDate('hospitalized_date', '入院日は必須項目です。')
+                    ->add('hospitalized_date', 'validDate', [
                         'rule' => 'date',
                         'message' => '有効な日付を入力してください。'
                     ])
@@ -229,7 +231,8 @@ class KanjaListController extends AppController {
                     'doctor_name' => $data['doctor_name'],
                     'blood_warn' => !empty($data['blood_warn']),
                     'contact_warn' => !empty($data['contact_warn']),
-                    'air_warn' => !empty($data['air_warn'])
+                    'air_warn' => !empty($data['air_warn']),
+                    'remarks' => $data['remarks']
                 ]);
                 if ($customersTable->save($customer) && $medicalInfosTable->save($medicalInfo)) {
                     $this->Flash->success(__('新しい患者が登録されました。'));
@@ -292,13 +295,21 @@ class KanjaListController extends AppController {
      * @return void
      */
     public function kanjaShow($customer_no) {
+
         $customersTable = TableRegistry::getTableLocator()->get('Customers');
         $customer = $customersTable->find()
         ->where(['Customers.customer_no' => $customer_no])
         ->contain(['MedicalInfos'])
         ->firstOrFail();
     
-        // マスターデータ取得
+        /**
+         * @var mixed $mastersTable マスタデータを取得
+         * @var mixed $bloodTypes 血液型マスタ
+         * @var mixed $departments 診療科マスタ
+         * @var mixed $severities 重症度マスタ
+         * @var mixed $falls 落傷マスタ
+         * @var mixed $customer 患者情報
+         */
         $mastersTable = TableRegistry::getTableLocator()->get('Masters');
         $bloodTypes = $mastersTable->find('list', [
             'keyField' => 'item_code',
@@ -319,7 +330,107 @@ class KanjaListController extends AppController {
             'keyField' => 'item_code',
             'valueField' => 'item_nm_short'
         ])->where(['master_key' => '009'])->toArray();
+
+        /**
+         * 表示用のプロパティを追加
+         * @var mixed $customer 患者情報
+         */
+        $customer->severity_display = $severities[$customer->severity] ?? $customer->severity;
+        $customer->fall_display = $falls[$customer->fall] ?? $customer->fall;
+
+          // コメントを取得
+        $commentsTable = TableRegistry::getTableLocator()->get('MedicalComments');
+
+        if ($this->request->is('post')) {
+            $commentData = $this->request->getData();
+            $commentData['customer_no'] = $customer_no;
+            $commentData['create_date'] = date('Y-m-d H:i:s');
+    
+            $comment = $commentsTable->newEntity($commentData);
+            if ($commentsTable->save($comment)) {
+                $this->Flash->success('コメントが登録されました。');
+            } else {
+                $this->Flash->error('コメントの登録に失敗しました。');
+            }
+            return $this->redirect(['action' => 'kanjaShow', $customer_no]);
+        }
+
+        $comments = $commentsTable->find()
+            ->where(['customer_no' => $customer_no])
+            ->order(['create_date' => 'DESC'])
+            ->all();
+    
+        $this->set(compact('customer', 'bloodTypes', 'departments', 'severities', 'falls', 'comments'));
+    }
+    /**
+     * 患者情報更新画面
+     * 
+     * @param mixed $customer_no
+     * @return void
+     */
+    public function kanjaEdit($customer_no) {
+
+        $customersTable = TableRegistry::getTableLocator()->get('Customers');
+        $medicalInfosTable = TableRegistry::getTableLocator()->get('MedicalInfos');
+        $customer = $customersTable->find()
+            ->where(['Customers.customer_no' => $customer_no])
+            ->contain(['MedicalInfos'])
+            ->firstOrFail();
+        
+        if ($this->request->is(['post', 'put'])) {
+            $data = $this->request->getData();
+
+            //validation check
+            //생년월일
+            //성별
+            //입원날짜
+            //혈액형
+            //전화번호
+            //진료과
+            //담당의
+            //중증도
+            //낙상
+
+            // 接続注意、血液、空気注意のチェックボックスの値を確認
+            $data['medical_info']['contact_warn'] = isset($data['medical_info']['contact_warn']) ? true : false;
+            $data['medical_info']['blood_warn'] = isset($data['medical_info']['blood_warn']) ? true : false;
+            $data['medical_info']['air_warn'] = isset($data['medical_info']['air_warn']) ? true : false;
+
+            $data['birthdate'] = $data['birth_year'] . sprintf('%02d', $data['birth_month']) . sprintf('%02d', $data['birth_day']);
+
+            $customer = $customersTable->patchEntity($customer, $data);
+            $medicalInfo = $medicalInfosTable->patchEntity($customer->medical_info, $data);
+            
+            if ($customersTable->save($customer) && $medicalInfosTable->save($medicalInfo)) {
+                $this->Flash->success('患者情報が更新されました。');
+                return $this->redirect(['action' => 'kanjaList', $customer_no]);
+            } else {
+                $this->Flash->error('情報の更新に失敗しました。もう一度お試しください。');
+            }
+        }
+        // マスターデータ取得
+        $mastersTable = TableRegistry::getTableLocator()->get('Masters');
+        $bloodTypes = $mastersTable->find('list', [
+            'keyField' => 'item_code',
+            'valueField' => 'item_name'
+        ])->where(['master_key' => '003', 'item_name !=' => '000'])->toArray();
+    
+        $departments = $mastersTable->find('list', [
+            'keyField' => 'item_code',
+            'valueField' => 'item_name'
+        ])->where(['master_key' => '007', 'item_name !=' => '000'])->toArray();
+    
+        $severities = $mastersTable->find('list', [
+            'keyField' => 'item_code',
+            'valueField' => 'item_nm_short'
+        ])->where(['master_key' => '008', 'item_name !=' => '000'])->toArray();
+    
+        $falls = $mastersTable->find('list', [
+            'keyField' => 'item_code',
+            'valueField' => 'item_nm_short'
+        ])->where(['master_key' => '009', 'item_name !=' => '000'])->toArray();
     
         $this->set(compact('customer', 'bloodTypes', 'departments', 'severities', 'falls'));
+
     }
 }

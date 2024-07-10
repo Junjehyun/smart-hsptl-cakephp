@@ -62,15 +62,15 @@
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">入院日付 <span class="text-red-500">必須</span></label>
-                    <?= $this->Form->control('hospital_date', [
+                    <?= $this->Form->control('hospitalized_date', [
                         'label' => false,
                         'type' => 'date',
                         'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400',
                         'placeholder' => '入院日選択(YYYY-MM-DD)',
-                        'value' => $data['hospital_date'] ?? ''
+                        'value' => $data['hospitalized_date'] ?? ''
                     ]) ?>
-                    <?php if (!empty($errors['hospital_date'])): ?>
-                        <?php foreach ($errors['hospital_date'] as $error): ?>
+                    <?php if (!empty($errors['hospitalized_date'])): ?>
+                        <?php foreach ($errors['hospitalized_date'] as $error): ?>
                             <div class="text-red-500"><?= h($error) ?></div>
                         <?php endforeach; ?>
                     <?php endif; ?>
@@ -134,7 +134,6 @@
                 </div>
                 <div class="flex flex-col">
                     <label class="mb-1 text-sm text-gray-600">担当医名 <span class="text-red-500">必須</span></label>
-                    <!-- <input name="doctor_name" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" type="text" placeholder="担当医名"> -->
                     <?= $this->Form->control('doctor_name', [
                         'label' => false,
                         'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400',
@@ -198,7 +197,7 @@
                 </div>
                 <div class="flex flex-col col-span-2">
                     <label class="mb-1 text-sm text-gray-600">重要事項</label>
-                    <textarea class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="重要事項" name="remarks"></textarea>
+                    <textarea class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400" placeholder="重要事項" name="remarks"><?= $data['remarks'] ?? '' ?></textarea>
                 </div>
             </div>
         </div>
