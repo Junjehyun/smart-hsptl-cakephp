@@ -103,6 +103,10 @@ return function (RouteBuilder $routes): void {
          */
         $builder->connect('/csv-upload', ['controller' => 'CsvUpload', 'action' => 'upload'])->setMethods(['GET', 'POST']);
 
+        /**
+         * イメージロゴ登録画面
+         */
+        $builder->connect('/image-upload', ['controller' => 'ImgUpload', 'action' => 'image-upload'])->setMethods(['GET', 'POST']);
 
 
         /*

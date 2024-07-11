@@ -112,6 +112,15 @@
                         <?php endforeach; ?>
                     </tbody>
                 </table>
+                <div class="paginator mt-3">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item"><?= $this->Paginator->first('<< ' . __('最初')) ?></li>
+                        <li class="page-item"><?= $this->Paginator->prev('< ' . __('前へ')) ?></li>
+                        <?= $this->Paginator->numbers(['class' => 'page-item', 'tag' => 'li']) ?>
+                        <li class="page-item"><?= $this->Paginator->next(__('次へ') . ' >') ?></li>
+                        <li class="page-item"><?= $this->Paginator->last(__('最後') . ' >>') ?></li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

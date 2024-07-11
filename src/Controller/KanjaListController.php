@@ -5,6 +5,15 @@ namespace App\Controller;
 use Cake\Validation\Validator;
 use Cake\ORM\TableRegistry;
 class KanjaListController extends AppController {
+
+    /**
+     * ページネーションの設定
+     * @return void
+     */
+    public function initialize(): void {
+        parent::initialize();
+        $this->loadComponent('paginator');
+    }
     /**
      * 患者一覧画面（検索機能含め）
      * 
@@ -13,9 +22,13 @@ class KanjaListController extends AppController {
      * @throws \Cake\Http\Exception\MethodNotAllowedException メソッドが許可されていない場合の例外
      */
     public function kanjaList() {
+
+        $this->loadComponent('Paginator');
         // 患者一覧画面を表示
         $customersTable = TableRegistry::getTableLocator()->get('Customers');
-        $customers = $customersTable->find('all')->toArray();
+
+        //$customers = $customersTable->find('all')->toArray();
+
         //検索クエリ
         $searchKanja = $this->request->getQuery('searchKanja');
         // MastersTableを取得
@@ -42,6 +55,7 @@ class KanjaListController extends AppController {
         $query = $customersTable->find()
                 ->contain(['MedicalInfos'])
                 ->order(['Customers.id' => 'ASC']);
+
         if($searchKanja) {
             $query->where([
                 'OR' => [
@@ -50,7 +64,11 @@ class KanjaListController extends AppController {
                 ]    
             ]);
         }
-        $customers = $query->toArray();
+
+        //$customers = $query->toArray();
+
+        $customers = $this->Paginator->paginate($query, ['limit' => 10]);
+
         $this->set(compact('customers', 'searchKanja', 'severitiesList', 'fallsList', 'bloodTypeList', 'departmentsList'));
 
     }
@@ -372,6 +390,7 @@ class KanjaListController extends AppController {
 
         $customersTable = TableRegistry::getTableLocator()->get('Customers');
         $medicalInfosTable = TableRegistry::getTableLocator()->get('MedicalInfos');
+        
         $customer = $customersTable->find()
             ->where(['Customers.customer_no' => $customer_no])
             ->contain(['MedicalInfos'])

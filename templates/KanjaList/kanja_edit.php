@@ -12,7 +12,7 @@
                     <label class="mb-1 text-sm text-gray-600">氏名 <span class="text-red-500">必須</span></label>
                     <?= $this->Form->control('name', [
                         'label' => false,
-                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 cursor-not-allowed',
+                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 disabled:bg-gray-200 cursor-not-allowed',
                         'placeholder' => '氏名',
                         'disabled' => true
                     ]) ?>
