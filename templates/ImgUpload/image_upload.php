@@ -7,11 +7,21 @@
         <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow">
             <div class="flex flex-col">
                 <label class="mb-1 text-m text-gray-600">施設名 <span class="text-red-500 text-sm">必須</span></label>
-                <?= $this->Form->input('facility_name', ['type' => 'text', 'class' => 'mt-1 p-2 w-full border border-gray-300 rounded', 'placeholder' => '施設名を入力して下さい', 'value' => $facility->name ?? '']) ?>
+                <?= $this->Form->input('facility_name', [
+                    'id' => 'facility_name',
+                    'type' => 'text', 'class' => 
+                    'mt-1 p-2 w-full border border-gray-300 rounded', 
+                    'placeholder' => '施設名を入力して下さい', 
+                    'value' => $facility->name ?? ''
+                    ]) ?>
             </div>
             <div class="flex flex-col mt-5">
                 <label class="mb-1 text-m text-gray-600">ロゴファイル <span class="text-red-500 text-sm">必須</span></label>
-                <?= $this->Form->file('hsptl_image', ['class' => 'block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-gray-300 rounded', 'aria-describedby' => 'file_input_help']) ?>
+                <?= $this->Form->file('hsptl_image', [
+                    'id' => 'hsptl_image',
+                    'class' => 'block w-full text-sm text-slate-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-sky-50 file:text-sky-700 hover:file:bg-sky-100 border border-gray-300 rounded', 
+                    'aria-describedby' => 'file_input_help'
+                    ]) ?>
                 <p class="text-sm text-gray-500 mt-2" id="file_input_help">PNG, JPG, or GIF (MAX, 800x400px).</p>
             </div>
             <div class="flex flex-col sm:flex-row items-center mt-5">
@@ -33,7 +43,11 @@
             <div class="sm:grid grid-cols-2 gap-4 mt-5">
                 <div class="flex flex-col mb-4">
                     <label class="mb-1 text-lg text-gray-600">ライセンス数 <span class="text-red-500 text-sm">必須</span></label>
-                    <?= $this->Form->input('license_count', ['type' => 'text', 'class' => 'mt-1 p-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent', 'value' => $facility->license_count ?? 100]) ?>
+                    <?= $this->Form->input('license_count', 
+                    ['type' => 'text',
+                    'class' => 'mt-1 p-3 w-full border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent', 
+                    'value' => $facility->license_count ?? 100]) 
+                    ?>
                 </div>
                 <div class="flex flex-col mb-4">
                     <label class="mb-1 text-lg text-gray-600">言語 <span class="text-red-500 text-sm">必須</span></label>
@@ -54,7 +68,36 @@
         </div>
     </div>
 <?= $this->Form->end() ?>
+<!--js-->
 <script>
+    $(document).ready(function() {
+        // 画像選択したとき、プレビュー表示
+        var hsptlImage = document.getElementById('hsptl_image');
 
+        if (hsptlImage) {
+            hsptlImage.addEventListener('change', function (event) {
+                var input = event.target;
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        var newSrc = e.target.result + '?t=' + new Date().getTime();
+                        if (document.getElementById('logoImage')) {
+                            document.getElementById('logoImage').setAttribute('src', e.target.result);
+                        } else {
+                            document.getElementById('defaultText').style.display = 'none';
+                            document.getElementById('logoImageContainer').innerHTML = '<img src="' + e.target.result + '" alt="Logo" class="w-full h-auto max-h-40 object-contain" id="logoImage">';
+                        }
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            });
+        }
+
+    });
+        // 削除ボタンを押した時、プレビューから画像を削除
+
+        //適用ボタンを押した時、画像をアップロード
+
+        // ページロード時、デフォルトアイコンとテキストを非表示（サムネイルがある場合）
 
 </script>

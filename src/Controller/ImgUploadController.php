@@ -17,9 +17,9 @@ class ImgUploadController extends AppController
 {
     public function initialize(): void
     {
-        // parent::initialize();
-        // $this->loadComponent('Flash');
-        // $this->Facilities = TableRegistry::getTableLocator()->get('Facilities'); 
+        parent::initialize();
+        $this->loadComponent('Flash');
+        $this->Facilities = TableRegistry::getTableLocator()->get('Facilities'); 
     }
     /**
      * イメージロゴ登録画面
@@ -28,10 +28,10 @@ class ImgUploadController extends AppController
      */
     public function imageUpload()
     {
-        // $facility = $this->Facilities->find('all', ['order' => ['id' => 'DESC']])->first();
-        // $logoPath = $facility ? $facility->logo_image_name : null;
-        // $this->request->getSession()->write('image', $logoPath);
-        // $this->set(compact('logoPath', 'facility'));
+        $facility = $this->Facilities->find('all', ['order' => ['id' => 'DESC']])->first();
+        $logoPath = $facility ? $facility->logo_image_name : null;
+        $this->request->getSession()->write('image', $logoPath);
+        $this->set(compact('logoPath', 'facility'));
     }
 
     /**
