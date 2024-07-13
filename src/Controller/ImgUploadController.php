@@ -7,6 +7,10 @@ use Cake\Datasource\Exception\RecordNotFoundException;
 use Cake\Filesystem\File;
 use Cake\I18n\FrozenTime;
 use Cake\ORM\TableRegistry;
+use Cake\Filesystem\Folder;
+use Exception;
+
+use function Cake\Error\dd;
 
 /**
  * ImgUploadController Controller
@@ -43,28 +47,62 @@ class ImgUploadController extends AppController
      */
     public function imageToroku()
     {
-        // $facility = $this->Facilities->newEmptyEntity();
-        // if ($this->request->is('post')) {
-        //     $data = $this->request->getData();
-        //     $image = $this->request->getData('hsptl_image');
+        if ($this->request->is('post')) 
+        {
+            // formのデータを取得
+            $data = $this->request->getData();
 
-        //     // 画像アップロード
-        //     $originalName = pathinfo($image->getClientFilename(), PATHINFO_FILENAME);
-        //     $imageName = $originalName . '_' . FrozenTime::now()->format('YmdHis') . '.' . pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
-        //     $image->moveTo(WWW_ROOT . 'img' . DS . $imageName);
+            //アップデート処理
+            $image = $this->request->getData('hsptl_image');
 
-        //     $this->request->getSession()->write('image', $imageName);
+            // 保存先のパス
+            /**
+             * @var string
+             * $uploadPath webroot/uploads/images/に保存される。
+             */
+            $uploadPath = WWW_ROOT . 'uploads' . DS . 'images' . DS;
 
-        //     // Faciliteisテーブルにデータを保存
-        //     $data['logo_image_name'] = $imageName;
-        //     $facility = $this->Facilities->patchEntity($facility, $data);
-        //     if ($this->Facilities->save($facility)) {
-        //         $this->Flash->success('画像をアップロードしました。');
-        //     } else {
-        //         $this->Flash->error('画像のアップロードに失敗しました。');
-        //     }
-        // }
-        // return $this->redirect(['action' => 'image-upload']);
+            if ($image && $image->getError() === UPLOAD_ERR_OK) {
+                $originalName = pathinfo($image->getClientFilename(), PATHINFO_FILENAME);
+                $extension = pathinfo($image->getClientFilename(), PATHINFO_EXTENSION);
+
+                 // 画像の拡張子をチェック
+                $validExtensions = ['png', 'jpg', 'jpeg', 'gif'];
+                if (!in_array($extension, $validExtensions)) {
+                    $this->Flash->error('PNG、JPGまたはGIF形式の画像をアップロードしてください。');
+                    return $this->redirect(['action' => 'imageUpload']);
+                }
+                 // 画像の大きさをチェック
+                list($width, $height) = getimagesize($image->getStream()->getMetadata('uri'));
+                if ($width > 800 || $height > 400) {
+                    $this->Flash->error('画像の大きさは800x400pxです。');
+                    return $this->redirect(['action' => 'imageUpload']);
+                }
+
+                $imageName = $originalName . '_' . FrozenTime::now()->format('YmdHis') . '.' . $extension;
+                $imagePath = $uploadPath . $imageName;
+
+                //画像を保存
+                $image->moveTo($imagePath);
+                //画像のパスをセッションに保存
+                $data['logo_image_name'] = 'uploads/images/' . $imageName;
+                } else {
+                    $imageName = null; // 画像がアップロードされなかった場合
+            }
+            
+             // Facilityテーブルにデータを保存
+            $facility = $this->Facilities->newEntity($data);
+
+            if ($this->Facilities->save($facility)) {
+                // Headerに画像を表示するためのセッションを保存
+                $this->request->getSession()->write('headerImage', 'uploads/images/' . $imageName);
+
+                $this->Flash->success('画像をアップロードしました。');
+                return $this->redirect(['action' => 'imageUpload']);
+            } else {
+                $this->Flash->error('画像のアップロードに失敗しました。もう一度お試しください。');
+            }
+        }
     }
 
     /**
@@ -77,19 +115,38 @@ class ImgUploadController extends AppController
      */
     public function imageDelete()
     {
-        // $facility = $this->Facilities->find('all')->first();
+        $this->request->allowMethod(['post']);
 
-        // if ($facility && $facility->logo_image_name) {
-        //     $imagePath = WWW_ROOT . 'img' . DS . $facility->logo_image_name;
-        //     if (file_exists($imagePath)) {
-        //         unlink($imagePath);
-        //     }
-        //     if ($this->Facilities->delete($facility)) {
-        //         $this->request->getSession()->delete('image');
-        //         return $this->response->withType('application/json')->withStringBody(json_encode(['success' => '画像を削除しました。']));
-        //     }
-        // }
-        // return $this->response->withType('application/json')->withStringBody(json_encode(['error' => '画像の削除が失敗になりました。']));
-    }
+        // 로그 추가
+        $this->log('imageDelete called', 'debug');
+    
+        $facility = $this->Facilities->find()->first();
+        
+        if ($facility && $facility->logo_image_name) {
+            $imagePath = WWW_ROOT . 'uploads' . DS . 'images' . DS . basename($facility->logo_image_name);
+
+            if (file_exists($imagePath)) {
+                unlink($imagePath);
+            }
+
+            try {
+                // データベースから画像のパスを削除
+                if ($this->Facilities->delete($facility)) {
+                    $this->request->getSession()->delete('headerImage');
+                    $this->Flash->success('画像を削除しました。');
+                } else {
+                    $this->Flash->error('画像の削除に失敗しました。もう一度お試しください。');
+                }
+            } catch (Exception $e) {
+                $this->Flash->error('画像の削除中にエラーが発生しました。もう一度お試しください。');
+            }
+
+        }  else {
+            $this->Flash->error('削除する画像が見つかりません。');
+        }
+        
+        return $this->redirect(['action' => 'imageUpload']);
+
+        }
 
 }

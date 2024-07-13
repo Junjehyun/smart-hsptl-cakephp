@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 use Cake\ORM\TableRegistry;
-
+use Cake\Http\Exception\NotFoundException;
 /**
  * CsvUpload Controller
  *
@@ -11,97 +11,14 @@ use Cake\ORM\TableRegistry;
  */
 class CsvUploadController extends AppController
 {
-    /**
-     * Index method
-     *
-     * @return \Cake\Http\Response|null|void Renders view
-     */
-    public function index()
-    {
-        $csvUpload = $this->paginate($this->CsvUpload);
 
-        $this->set(compact('csvUpload'));
+    public function initialize(): void
+    {
+        parent::initialize();
+        $this->loadComponent('RequestHandler');
+        $this->Masters = TableRegistry::getTableLocator()->get('Masters'); 
     }
 
-    /**
-     * View method
-     *
-     * @param string|null $id Csv Upload id.
-     * @return \Cake\Http\Response|null|void Renders view
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function view($id = null)
-    {
-        $csvUpload = $this->CsvUpload->get($id, [
-            'contain' => [],
-        ]);
-
-        $this->set(compact('csvUpload'));
-    }
-
-    /**
-     * Add method
-     *
-     * @return \Cake\Http\Response|null|void Redirects on successful add, renders view otherwise.
-     */
-    public function add()
-    {
-        $csvUpload = $this->CsvUpload->newEmptyEntity();
-        if ($this->request->is('post')) {
-            $csvUpload = $this->CsvUpload->patchEntity($csvUpload, $this->request->getData());
-            if ($this->CsvUpload->save($csvUpload)) {
-                $this->Flash->success(__('The csv upload has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The csv upload could not be saved. Please, try again.'));
-        }
-        $this->set(compact('csvUpload'));
-    }
-
-    /**
-     * Edit method
-     *
-     * @param string|null $id Csv Upload id.
-     * @return \Cake\Http\Response|null|void Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function edit($id = null)
-    {
-        $csvUpload = $this->CsvUpload->get($id, [
-            'contain' => [],
-        ]);
-        if ($this->request->is(['patch', 'post', 'put'])) {
-            $csvUpload = $this->CsvUpload->patchEntity($csvUpload, $this->request->getData());
-            if ($this->CsvUpload->save($csvUpload)) {
-                $this->Flash->success(__('The csv upload has been saved.'));
-
-                return $this->redirect(['action' => 'index']);
-            }
-            $this->Flash->error(__('The csv upload could not be saved. Please, try again.'));
-        }
-        $this->set(compact('csvUpload'));
-    }
-
-    /**
-     * Delete method
-     *
-     * @param string|null $id Csv Upload id.
-     * @return \Cake\Http\Response|null|void Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
-    public function delete($id = null)
-    {
-        $this->request->allowMethod(['post', 'delete']);
-        $csvUpload = $this->CsvUpload->get($id);
-        if ($this->CsvUpload->delete($csvUpload)) {
-            $this->Flash->success(__('The csv upload has been deleted.'));
-        } else {
-            $this->Flash->error(__('The csv upload could not be deleted. Please, try again.'));
-        }
-
-        return $this->redirect(['action' => 'index']);
-    }
 
     /**
      * CSV ファイルアップロード
@@ -150,5 +67,41 @@ class CsvUploadController extends AppController
                 $this->Flash->error(__('CSVファイルのアップロードに失敗しました。'));
             }
         }
+    }
+
+    /**
+     * マスターリスト表示
+     * 
+     * @return void
+     * 
+     */
+    public function masterList() {
+
+        $masters = $this->Masters->find('list', [
+            'keyField' => 'id',
+            'valueField' => 'master_name'
+        ])->toArray();
+
+        $this->set(compact('masters'));
+        
+    }
+
+    public function getValuesByMasterName()
+    {
+        $this->request->allowMethod(['post']);
+        $masterName = $this->request->getData('master_name');
+
+        if (!$masterName) {
+            throw new NotFoundException(__('Invalid master name'));
+        }
+
+        $values = $this->Masters->find('all')
+            ->where(['master_name' => $masterName, 'item_code !=' => '000'])
+            ->toArray();
+
+            //dd($values);
+
+        $this->set('values', $values);
+        $this->viewBuilder()->setOption('serialize', ['values']);
     }
 }

@@ -44,6 +44,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 
     <!--Tailwindcss-->
     <?= $this->Html->css('tailwind') ?>
+    <?= $this->Html->meta('csrfToken', $this->request->getAttribute('csrfToken')) ?>
 
     <?= $this->fetch('meta') ?>
     <?= $this->fetch('css') ?>
@@ -67,8 +68,13 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
 </head>
 <body class="bg-white flex-grow p-6">
     <nav class="top-nav bg-sky-50 p-4 shadow-lg">
-        <div class="top-nav-title">
-            <a href="<?= $this->Url->build('/index') ?>"><span>Smart</span> Hospital</a>
+        <div class="top-nav-title flex items-center">
+            <a href="<?= $this->Url->build('/index') ?>" class="flex items-center">
+                <?php if ($headerImage): ?>
+                    <img src="<?= $this->Url->build('/' . $headerImage) ?>" alt="Logo" style="height: 40px;">
+                <?php endif; ?>
+                <span>Smart</span> Hospital
+            </a>
         </div>
         <div class="top-nav-links relative">
             <!-- <a target="_blank" rel="noopener" href="https://book.cakephp.org/4/">Documentation</a>

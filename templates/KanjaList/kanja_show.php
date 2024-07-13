@@ -84,18 +84,6 @@
     <p><?= h($customer->medical_info->remarks) ?></p>
 </div>
 <!--コメント-->
-<!-- <div class="bg-white p-6 rounded-lg shadow-md mb-6">
-    <h2 class="text-2xl font-bold mb-4 text-sky-400">コメント</h2>          
-        <textarea name="comments" rows="4" class="w-full p-2 border rounded-lg mb-4" placeholder="コメントを入力してください"></textarea>
-        <button type="submit" class="bg-sky-400 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">コメント登録</button>
-    </form>
-    <div class="mt-6">
-        <div class="border-b border-gray-200 mb-4 pb-2">
-            <p><strong></strong> <span class="text-gray-600 text-sm"></span></p>
-            <p></p>
-        </div>
-    </div>
-</div> -->
 <div class="bg-white p-6 rounded-lg shadow-md mb-6">
     <h2 class="text-2xl font-bold mb-4 text-sky-400">コメント</h2>
     <?= $this->Form->create(null, ['url' => ['action' => 'kanjaShow', $customer->customer_no]]) ?>         

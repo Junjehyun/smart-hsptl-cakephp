@@ -2,12 +2,11 @@
 <a href="/image-upload">
     <h1 class="text-5xl font-bold text-center mt-5">イメージロゴ登録</h1>
 </a>
-<?= $this->Form->create(null, ['type' => 'file']) ?>
     <div class="container flex justify-center max-w-8xl p-5 py-8">
         <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow">
             <div class="flex flex-col">
                 <label class="mb-1 text-m text-gray-600">施設名 <span class="text-red-500 text-sm">必須</span></label>
-                <?= $this->Form->input('facility_name', [
+                <?= $this->Form->input('name', [
                     'id' => 'facility_name',
                     'type' => 'text', 'class' => 
                     'mt-1 p-2 w-full border border-gray-300 rounded', 
@@ -27,17 +26,17 @@
             <div class="flex flex-col sm:flex-row items-center mt-5">
                 <div class="w-full sm:w-2/3 lg:w-1/2 sm-flex mt-5" id="logoImageContainer">
                     <?php if ($logoPath): ?>
-                        <img src="<?= $this->Url->assetUrl('img/' . $logoPath) ?>" alt="Logo" class="w-full h-auto max-h-40 object-contain" id="logoImage">
+                        <img src="<?= $this->Url->assetUrl($logoPath) ?>" alt="Logo" 
+                        class="w-full h-auto max-h-40 object-contain" 
+                        id="logoImage">
                     <?php else: ?>
                         <span class="ml-3 text-sm" id="defaultText">画像を選択してください</span>
                     <?php endif; ?>
                 </div>
                 <div class="text-center">
-                    <?= $this->Form->button(__('削除'), [
-                        'type' => 'submit', 
-                        'name' => 'delete_image', 
-                        'class' => 'bg-red-400 hover:bg-red-500 font-bold text-center text-white p-2 my-2 sm:my-0 sm:mx-2 rounded w-14 sm:w-16 h-10 sm:h-12 shrink-0'
-                        ]) ?>
+                    <button type="submit" class="bg-red-400 hover:bg-red-500 font-bold text-center text-white p-2 my-2 sm:my-0 sm:mx-2 rounded w-14 sm:w-16 h-10 sm:h-12 shrink-0">
+                        削除
+                    </button>
                 </div>
             </div>
             <div class="sm:grid grid-cols-2 gap-4 mt-5">
@@ -67,7 +66,6 @@
             </div>
         </div>
     </div>
-<?= $this->Form->end() ?>
 <!--js-->
 <script>
     $(document).ready(function() {
@@ -92,12 +90,5 @@
                 }
             });
         }
-
     });
-        // 削除ボタンを押した時、プレビューから画像を削除
-
-        //適用ボタンを押した時、画像をアップロード
-
-        // ページロード時、デフォルトアイコンとテキストを非表示（サムネイルがある場合）
-
 </script>

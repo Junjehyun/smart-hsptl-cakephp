@@ -102,11 +102,16 @@ return function (RouteBuilder $routes): void {
          * CSV Masterデータを取得するルーター設定
          */
         $builder->connect('/csv-upload', ['controller' => 'CsvUpload', 'action' => 'upload'])->setMethods(['GET', 'POST']);
+        $builder->connect('/master-list', ['controller' => 'CsvUpload', 'action' => 'masterList'])->setMethods(['GET']);
+        $builder->connect('/master/values', ['controller' => 'CsvUpload', 'action' => 'getValuesByMasterName'])->setMethods(['POST']);
 
         /**
          * イメージロゴ登録画面
          */
-        $builder->connect('/image-upload', ['controller' => 'ImgUpload', 'action' => 'image-upload'])->setMethods(['GET', 'POST']);
+        $builder->connect('/image-upload', ['controller' => 'ImgUpload', 'action' => 'imageUpload'])->setMethods(['GET']);
+        $builder->connect('/image-upload', ['controller' => 'ImgUpload', 'action' => 'imageToroku'])->setMethods(['POST']);
+        $builder->connect('/image-delete', ['controller' => 'ImgUpload', 'action' => 'imageDelete'])->setMethods(['POST']);
+
 
 
         /*

@@ -17,9 +17,9 @@
                 <i class="fas fa-user-plus mr-2"></i> CSV一括登録
             </button>
         </a>
-        <a href="#">
+        <a href="/image-upload">
             <button class="bg-sky-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
-                <i class="fas fa-file-csv mr-2"></i> comming soon
+                <i class="fas fa-file-csv mr-2"></i> イメージ登録
             </button>
         </a>
     </div>
