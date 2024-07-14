@@ -106,11 +106,12 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/master/values', ['controller' => 'CsvUpload', 'action' => 'getValuesByMasterName'])->setMethods(['POST']);
 
         /**
-         * イメージロゴ登録画面
+         * イメージロゴ登録画面関連
+         * 
          */
         $builder->connect('/image-upload', ['controller' => 'ImgUpload', 'action' => 'imageUpload'])->setMethods(['GET']);
         $builder->connect('/image-upload', ['controller' => 'ImgUpload', 'action' => 'imageToroku'])->setMethods(['POST']);
-        $builder->connect('/image-delete', ['controller' => 'ImgUpload', 'action' => 'imageDelete'])->setMethods(['POST']);
+        $builder->connect('/image-delete', ['controller' => 'ImgUpload', 'action' => 'imageDelete'])->setMethods(['DELETE']);
 
 
 

@@ -2,6 +2,7 @@
 <a href="/image-upload">
     <h1 class="text-5xl font-bold text-center mt-5">イメージロゴ登録</h1>
 </a>
+<?= $this->Form->create(null, ['type' => 'file', 'url' => ['action' => 'imageToroku']]) ?>
     <div class="container flex justify-center max-w-8xl p-5 py-8">
         <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow">
             <div class="flex flex-col">
@@ -34,9 +35,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="bg-red-400 hover:bg-red-500 font-bold text-center text-white p-2 my-2 sm:my-0 sm:mx-2 rounded w-14 sm:w-16 h-10 sm:h-12 shrink-0">
-                        削除
-                    </button>
+                    <button type="button" id="imgDelBtn" class="bg-red-400 hover:bg-red-500 font-bold text-center text-white p-2 my-2 sm:my-0 sm:mx-2 rounded w-14 sm:w-16 h-10 sm:h-12 shrink-0">삭제</button>
                 </div>
             </div>
             <div class="sm:grid grid-cols-2 gap-4 mt-5">
@@ -61,11 +60,14 @@
             </div>
             <div class="flex justify-center space-x-4 mt-8">
                 <?= $this->Form->button(__('適用'), [
+                    'type' => 'submit',
+                    'id' => 'applyImg',
                     'class' => 'rounded-lg font-bold shadow my-4 px-16 py-2 mt-8 text-white bg-sky-400 hover:bg-sky-500 focus:bg-sky-600 border-none']) 
-                    ?>
+                ?>
             </div>
         </div>
     </div>
+<?= $this->Form->end() ?>
 <!--js-->
 <script>
     $(document).ready(function() {
@@ -89,6 +91,39 @@
                     reader.readAsDataURL(input.files[0]);
                 }
             });
+        }
+
+        // 画像削除
+        $('#imgDelBtn').on('click', function () {
+            $.ajax({
+                url: '<?= $this->Url->build(['action' => 'imageDelete']) ?>',
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-Token': '<?= $this->request->getAttribute('csrfToken') ?>'
+                },
+                success: function (response) {
+                    if (response.success) {
+                        $('#logoImage').remove();
+                        $('#logoImageContainer').html('<span class="ml-3 text-sm" id="defaultText">イメージをアップロードしてください。</span>');
+                        $('#hsptl_image').val('');
+                    } else {
+                        alert('画像削除が失敗しました。: ' + response.error);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    alert('エラーが発生しました。: ' + error);
+                }
+            });
+        });
+
+        // 画像適用
+        $('#applyImg').on('click', function () {
+            $('#imageForm').submit();
+        });
+
+        // 画像が選択された場合、デフォルトテキストを非表示
+        if ($('#logoImage').length > 0) {
+            $('#defaultText').hide();
         }
     });
 </script>

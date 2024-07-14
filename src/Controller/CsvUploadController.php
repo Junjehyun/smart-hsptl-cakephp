@@ -12,6 +12,11 @@ use Cake\Http\Exception\NotFoundException;
 class CsvUploadController extends AppController
 {
 
+    /**
+     * 初期化
+     * 
+     * @return void
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -37,10 +42,8 @@ class CsvUploadController extends AppController
             if ($file && $file->getClientFilename()) {
                 $fileStream = $file->getStream()->getMetadata('uri');
                 $fileHandle = fopen($fileStream, 'r');
-
                 if ($fileHandle !== false) {
                     $mastersTable = TableRegistry::getTableLocator()->get('Masters');
-
                     while (($data = fgetcsv($fileHandle)) !== false) {
                         $masterData = [
                             'master_key' => $data[0],
@@ -53,14 +56,11 @@ class CsvUploadController extends AppController
                             'use_flag' => isset($data[7]) ? (bool)$data[7] : true,
                             'remarks' => $data[8] ?? null
                         ];
-
                         $masterEntity = $mastersTable->newEntity($masterData);
                         $mastersTable->save($masterEntity);
                     }
-
                     fclose($fileHandle);
                 }
-
                 $this->Flash->success(__('CSVファイルがアップロードされ、処理されました。'));
                 return $this->redirect(['action' => 'upload']);
             } else {
@@ -76,32 +76,34 @@ class CsvUploadController extends AppController
      * 
      */
     public function masterList() {
-
         $masters = $this->Masters->find('list', [
-            'keyField' => 'id',
+            'keyField' => 'master_name',
             'valueField' => 'master_name'
         ])->toArray();
-
         $this->set(compact('masters'));
-        
     }
 
+    /**
+     * 
+     * マスター名に紐づく値を取得
+     * 
+     * @return void
+     */
     public function getValuesByMasterName()
     {
         $this->request->allowMethod(['post']);
         $masterName = $this->request->getData('master_name');
 
-        if (!$masterName) {
-            throw new NotFoundException(__('Invalid master name'));
-        }
-
         $values = $this->Masters->find('all')
             ->where(['master_name' => $masterName, 'item_code !=' => '000'])
             ->toArray();
 
-            //dd($values);
-
-        $this->set('values', $values);
+        $this->set('values');
+        $this->viewBuilder()->setClassName('Json');
         $this->viewBuilder()->setOption('serialize', ['values']);
+        $this->set([
+            'values' => $values,
+            '_serialize' => ['values']
+        ]);
     }
 }

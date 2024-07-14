@@ -3,7 +3,6 @@
     <h1 class="text-5xl font-bold text-center mt-5">マスターデータ一覧</h1>
 </a>
 <div class="container">
-    <h1 class="text-4xl font-bold mt-5">マスターデータ一覧</h1>
     <div class="flex justify-center max-w-4xl mx-auto p-5 py-8 mt-8">
         <div class="bg-white p-6 rounded-lg shadow space-y-3 w-full">
             <label for="master" class="block text-lg font-medium text-blue-400">
@@ -37,18 +36,19 @@
     $(document).ready(function() {
         const masterSelect = $('#master');
         const valuesBody = $('#valuesBody');
+        const csrfToken = '<?= $this->request->getAttribute('csrfToken') ?>';
+        const url = '<?= $this->Url->build(['controller' => 'CsvUpload', 'action' => 'getValuesByMasterName']) ?>';
 
         function masterData(masterName) {
             $.ajax({
-                url: '<?= $this->Url->build(['controller' => 'CsvUpload', 'action' => 'getValuesByMasterName']) ?>',
+                url: url,
                 type: 'POST',
                 data: JSON.stringify({ master_name: masterName }),
                 contentType: 'application/json',
                 headers: {
-                    'X-CSRF-Token': $('meta[name="csrfToken"]').attr('content')
+                    'X-CSRF-Token': '<?= $this->request->getAttribute('csrfToken') ?>'
                 },
                 success: function(data) {
-                    console.log(data); // 데이터 확인을 위해 콘솔에 출력
                     valuesBody.empty();
                     if (data.values) {
                         data.values.forEach(function(item, index) {
@@ -70,7 +70,6 @@
         }
 
         masterData(masterSelect.val());
-
         masterSelect.on('change', function() {
             masterData($(this).val());
         });

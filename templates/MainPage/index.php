@@ -22,6 +22,31 @@
                 <i class="fas fa-file-csv mr-2"></i> イメージ登録
             </button>
         </a>
+        <a href="/master-list">
+            <button class="bg-sky-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-4xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+                <i class="fas fa-file-csv mr-2"></i> マスターデータ一覧
+            </button>
+        </a>
+        <a href="#">
+            <button class="bg-rose-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+                <i class="fas fa-file-csv mr-2"></i> ユーザー管理
+            </button>
+        </a>
+        <a href="#">
+            <button class="bg-rose-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+                <i class="fas fa-file-csv mr-2"></i> ユーザー承認
+            </button>
+        </a>
+        <a href="#">
+            <button class="bg-rose-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+                <i class="fas fa-file-csv mr-2"></i> 病棟管理者
+            </button>
+        </a>
+        <a href="#">
+            <button class="bg-rose-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+                <i class="fas fa-file-csv mr-2"></i> QRタグ管理
+            </button>
+        </a>
     </div>
 </div>
 

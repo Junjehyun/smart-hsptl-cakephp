@@ -108,45 +108,40 @@ class ImgUploadController extends AppController
     /**
      * イメージ削除処理
      * 
-     * @return \Cake\Http\Response
      * @throws \Cake\Http\Exception\NotFoundException
      * @throws \Cake\Datasource\Exception\RecordNotFoundException
+     * @return \Cake\Http\Response|null|void
      * 
      */
     public function imageDelete()
     {
-        $this->request->allowMethod(['post']);
+        $this->request->allowMethod(['delete']);
 
-        // 로그 추가
-        $this->log('imageDelete called', 'debug');
-    
-        $facility = $this->Facilities->find()->first();
+        file_put_contents(WWW_ROOT . 'debug.log', 'imageDelete method called' . PHP_EOL, FILE_APPEND);
+
+        $facility = $this->Facilities->find()->order(['id' => 'DESC'])->first();
         
         if ($facility && $facility->logo_image_name) {
             $imagePath = WWW_ROOT . 'uploads' . DS . 'images' . DS . basename($facility->logo_image_name);
-
+    
             if (file_exists($imagePath)) {
                 unlink($imagePath);
+            } 
+
+            if ($this->Facilities->delete($facility)) {
+                $this->request->getSession()->delete('image');
+
+                return $this->response->withType('application/json')
+                    ->withStringBody(json_encode(['success' => 'イメージを削除しました。']));
+            } else {
+                return $this->response->withType('application/json')
+                    ->withStringBody(json_encode(['error' => 'イメージの削除に失敗しました。']));
             }
-
-            try {
-                // データベースから画像のパスを削除
-                if ($this->Facilities->delete($facility)) {
-                    $this->request->getSession()->delete('headerImage');
-                    $this->Flash->success('画像を削除しました。');
-                } else {
-                    $this->Flash->error('画像の削除に失敗しました。もう一度お試しください。');
-                }
-            } catch (Exception $e) {
-                $this->Flash->error('画像の削除中にエラーが発生しました。もう一度お試しください。');
-            }
-
-        }  else {
-            $this->Flash->error('削除する画像が見つかりません。');
+        } else {
+        return $this->response->withType('application/json')
+            ->withStringBody(json_encode(['error' => 'イメージが見つかりません。']));
         }
-        
-        return $this->redirect(['action' => 'imageUpload']);
 
-        }
+    }
 
 }
