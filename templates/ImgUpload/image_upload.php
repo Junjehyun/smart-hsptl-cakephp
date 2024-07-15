@@ -68,7 +68,6 @@
         </div>
     </div>
 <?= $this->Form->end() ?>
-<!--js-->
 <script>
     $(document).ready(function() {
         // 画像選択したとき、プレビュー表示
@@ -92,7 +91,6 @@
                 }
             });
         }
-
         // 画像削除
         $('#imgDelBtn').on('click', function () {
             $.ajax({
@@ -115,12 +113,10 @@
                 }
             });
         });
-
         // 画像適用
         $('#applyImg').on('click', function () {
             $('#imageForm').submit();
         });
-
         // 画像が選択された場合、デフォルトテキストを非表示
         if ($('#logoImage').length > 0) {
             $('#defaultText').hide();
