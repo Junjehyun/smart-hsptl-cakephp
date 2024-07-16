@@ -37,6 +37,9 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100&family=Yomogi&family=Zen+Maru+Gothic:wght@300&display=swap" rel="stylesheet">
 
+    <!-- Font Awesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
     <?= $this->Html->meta('icon') ?>
 
     <?= $this->Flash->render() ?>

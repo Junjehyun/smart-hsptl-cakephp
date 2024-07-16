@@ -113,6 +113,13 @@ return function (RouteBuilder $routes): void {
         $builder->connect('/image-upload', ['controller' => 'ImgUpload', 'action' => 'imageToroku'])->setMethods(['POST']);
         $builder->connect('/image-delete', ['controller' => 'ImgUpload', 'action' => 'imageDelete'])->setMethods(['DELETE']);
 
+        /**
+         * ユーザー関連コントローラー
+         */
+        $builder->connect('/user-approval', ['controller' => 'User', 'action' => 'userApproval'])->setMethods(['GET']);
+        $builder->connect('/user-approval-registration/:id', ['controller' => 'User', 'action' => 'userApprovalRegistration'])->setPass(['id'])->setMethods(['POST']);
+        $builder->connect('/user-info', ['controller' => 'User', 'action' => 'userInfo'])->setMethods(['GET']);
+        $builder->connect('/ward-manager', ['controller' => 'User', 'action' => 'wardManager'])->setMethods(['GET']);
 
 
         /*

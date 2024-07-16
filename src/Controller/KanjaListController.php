@@ -65,8 +65,6 @@ class KanjaListController extends AppController {
             ]);
         }
 
-        //$customers = $query->toArray();
-
         $customers = $this->Paginator->paginate($query, ['limit' => 10]);
 
         $this->set(compact('customers', 'searchKanja', 'severitiesList', 'fallsList', 'bloodTypeList', 'departmentsList'));
@@ -85,7 +83,6 @@ class KanjaListController extends AppController {
             // 生年月日を結合
             $data['birthdate'] = $data['birth_year'] . sprintf('%02d', $data['birth_month']) . sprintf('%02d', $data['birth_day']);
 
-            //dd($data);
             //customersテーブルを取得
             $customersTable = TableRegistry::getTableLocator()->get('Customers');
             $medicalInfosTable = TableRegistry::getTableLocator()->get('MedicalInfos');
