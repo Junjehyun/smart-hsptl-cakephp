@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Model\Entity;
 
 use Cake\ORM\Entity;
+use Cake\I18n\FrozenTime;
 
 /**
  * User Entity
@@ -35,6 +36,24 @@ use Cake\ORM\Entity;
  */
 class User extends Entity
 {
+
+    /**
+     * isOnlineメソッドを追加
+     *
+     * @return bool  
+     */ 
+    public function isOnline()
+    {
+        if ($this->last_activity_date) {
+            $now = FrozenTime::now();
+            $lastActivity = new FrozenTime($this->last_activity_date);
+            $diffInMinutes = $now->diffInMinutes($lastActivity);
+
+             // 最終アクティビティから5分以内ならオンラインと判定
+            return $diffInMinutes <= 5;
+        }
+        return false;
+    }
     /**
      * Fields that can be mass assigned using newEntity() or patchEntity().
      *

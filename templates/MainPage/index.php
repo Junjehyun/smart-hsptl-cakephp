@@ -28,12 +28,12 @@
             </button>
         </a>
         <a href="user-info">
-            <button class="bg-green-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+            <button class="bg-sky-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
             ユーザー管理
             </button>
         </a>
         <a href="/user-approval">
-            <button class="bg-green-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+            <button class="bg-sky-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
             ユーザー承認
             </button>
         </a>

@@ -117,10 +117,17 @@ return function (RouteBuilder $routes): void {
          * ユーザー関連コントローラー
          */
         $builder->connect('/user-approval', ['controller' => 'User', 'action' => 'userApproval'])->setMethods(['GET']);
-        $builder->connect('/user-approval-registration/:id', ['controller' => 'User', 'action' => 'userApprovalRegistration'])->setPass(['id'])->setMethods(['POST']);
+        $builder->connect('/user-approval-registration/{id}', ['controller' => 'User', 'action' => 'userApprovalRegistration'])->setPass(['id'])->setMethods(['POST']);
         $builder->connect('/user-info', ['controller' => 'User', 'action' => 'userInfo'])->setMethods(['GET']);
+        $builder->connect('/users/revoke-permission/:id', ['controller' => 'Users', 'action' => 'revokePermission'])->setPass(['id'])->setMethods(['POST']);
         $builder->connect('/ward-manager', ['controller' => 'User', 'action' => 'wardManager'])->setMethods(['GET']);
 
+        /**
+         * 病棟管理者
+         */
+        $builder->connect('/ward-manager', ['controller' => 'Users', 'action' => 'wardManager'])->setMethods(['GET']);
+        $builder->connect('/ward-update/:id', ['controller' => 'Users', 'action' => 'updateWard'])->setPass(['id'])->setMethods(['POST']);;
+        $builder->connect('/ward-manager/:id', ['controller' => 'Users', 'action' => 'getWardManager'])->setPass(['id'])->setMethods(['GET']);
 
         /*
          * Connect catchall routes for all controllers.

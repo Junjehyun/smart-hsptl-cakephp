@@ -35,7 +35,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="text-center">
-                    <button type="button" id="imgDelBtn" class="bg-red-400 hover:bg-red-500 font-bold text-center text-white p-2 my-2 sm:my-0 sm:mx-2 rounded w-14 sm:w-16 h-10 sm:h-12 shrink-0">삭제</button>
+                    <button type="button" id="imgDelBtn" class="bg-red-400 hover:bg-red-500 font-bold text-center text-white p-2 my-2 sm:my-0 sm:mx-2 rounded w-14 sm:w-16 h-10 sm:h-12 shrink-0">削除</button>
                 </div>
             </div>
             <div class="sm:grid grid-cols-2 gap-4 mt-5">

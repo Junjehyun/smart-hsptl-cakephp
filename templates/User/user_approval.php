@@ -72,8 +72,9 @@
     <div class="modal-content bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
         <span class="close cursor-pointer text-gray-600 absolute top-4 right-4 text-2xl">&times;</span>
         <h2 class="text-2xl mb-4 text-center font-semibold">ユーザー承認</h2>
-        <form id="approvalForm" class="space-y-4">
-            <?= $this->Form->create(null, ['url' => ['action' => 'userApprovalRegistration'], 'id' => 'approvalForm']) ?>
+        <?= $this->Form->create(null, [
+            'url' => ['controller' => 'User', 'action' => 'userApprovalRegistration', ':id'], 
+            'id' => 'approvalForm']) ?>
             <input type="hidden" name="user_id" id="user_id">
             <hr class="mt-2 border-sky-100">
             <div id="userNameDisplay" class="text-lg text-gray-700 font-medium text-center"></div>
@@ -113,8 +114,7 @@
                     登録
                 </button>
             </div>
-            <?= $this->Form->end() ?>
-        </form>
+        <?= $this->Form->end() ?>
     </div>
 </div>
 
@@ -125,6 +125,8 @@
         const userIdInput = document.getElementById('user_id');
         const closeBtn = document.querySelector('.close');
         const openModalBtns = document.querySelectorAll('.approveBtn');
+        const approvalForm = document.getElementById('approvalForm');
+        const cancelBtn = document.getElementById('cancelBtn');
 
         openModalBtns.forEach(button => {
             button.addEventListener('click', function () {
@@ -147,5 +149,39 @@
                 modal.style.display = 'none';
             }
         });
+
+        approvalForm.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            const userId = userIdInput.value;
+            const userType = approvalForm.querySelector('input[name="user_type"]:checked').value;
+            const confirmApprove = approvalForm.querySelector('#confirmApprove').checked;
+
+            if (!confirmApprove) {
+                alert('ユーザーのタイプを確認してください。');
+                return;
+            }
+
+            $.ajax({
+                url: '/user-approval-registration/' + userId,
+                type: 'POST',
+                data: {
+                    user_id: userId,
+                    user_type: userType,
+                    _csrfToken: $('input[name="_csrfToken"]').val()
+                },
+                success: function(response) {
+                    console.log("Response from server:", response);
+                    alert('ユーザー承認を完了しました。');
+                    modal.style.display = 'none';
+                    location.reload();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                    alert('エラーが発生しました。');
+                }
+            });
+        });
     });
+
 </script>
