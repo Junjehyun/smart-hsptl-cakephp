@@ -126,8 +126,14 @@ return function (RouteBuilder $routes): void {
          * 病棟管理者
          */
         $builder->connect('/ward-manager', ['controller' => 'Users', 'action' => 'wardManager'])->setMethods(['GET']);
-        $builder->connect('/ward-update/:id', ['controller' => 'Users', 'action' => 'updateWard'])->setPass(['id'])->setMethods(['POST']);;
-        $builder->connect('/ward-manager/:id', ['controller' => 'Users', 'action' => 'getWardManager'])->setPass(['id'])->setMethods(['GET']);
+        $builder->connect('/ward-update/{id}', ['controller' => 'Users', 'action' => 'updateWard'])->setPass(['id'])->setMethods(['POST']);;
+        $builder->connect('/ward-manager/{id}', ['controller' => 'Users', 'action' => 'getWardManager'])->setPass(['id'])->setMethods(['GET']);
+
+        /**
+         * QRコード関連
+         */
+        $builder->connect('/qr-index', ['controller' => 'QrCode', 'action' => 'index'])->setMethods(['GET']);
+        $builder->connect('/save-qr-code', ['controller' => 'QrCode', 'action' => 'saveQrCode', 'method' => 'POST']);
 
         /*
          * Connect catchall routes for all controllers.

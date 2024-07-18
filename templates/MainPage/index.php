@@ -42,8 +42,8 @@
             病棟管理者
             </button>
         </a>
-        <a href="#">
-            <button class="bg-rose-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
+        <a href="/qr-index">
+            <button class="bg-sky-400 hover:bg-sky-600 text-white font-bold py-4 px-6 rounded w-full h-96 text-5xl transform transition duration-500 ease-in-out hover:scale-110 border-none">
             QRタグ管理
             </button>
         </a>

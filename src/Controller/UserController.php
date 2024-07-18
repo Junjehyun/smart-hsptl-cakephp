@@ -202,15 +202,13 @@ class UserController extends AppController
     public function updateWard($id)
     {
         if ($this->request->is(['post'])) {
-
-            $wardCodes = $this->request->getData('ward_codes', []);
-
+            $wardCodes = $this->request->getData('ward_code', []);
             try {
                 $this->WardManager->deleteAll(['user_id' => $id, 'ward_code NOT IN' => $wardCodes]);
 
                 foreach ($wardCodes as $wardCode) {
                     $ward = $this->WardManager->find()
-                        ->where(['user_id' => $id, 'ward_code' => $wardCode])
+                        ->where(['user_id' => $id, 'ward_codes' => $wardCode])
                         ->first();
 
                     if (!$ward) {
@@ -219,14 +217,15 @@ class UserController extends AppController
 
                     $this->WardManager->save($ward);
                 }
-
-                return $this->response->withType('application/json')
-                    ->withStringBody(json_encode(['success' => true]));
-            } catch (\Exception $e) {
-                return $this->response->withType('application/json')
-                    ->withStringBody(json_encode(['success' => false, 'message' => '病棟の変更のエラーが発生しました。', 'error' => $e->getMessage()]))
-                    ->withStatus(500);
-            }
+                $this->response = $this->response->withType('application/json')
+                        ->withStringBody(json_encode(['success' => true]));
+                    return $this->response;
+                } catch (\Exception $e) {
+                    $this->response = $this->response->withType('application/json')
+                        ->withStringBody(json_encode(['success' => false, 'message' => '病棟更新中エラーが発生しました。', 'error' => $e->getMessage()]))
+                        ->withStatus(500);
+                    return $this->response;
+                }
         } else {
             throw new BadRequestException('Invalid request method');
         }

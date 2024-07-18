@@ -1,5 +1,5 @@
 <?php $this->assign('title', '病棟管理者'); ?>
-<a href="/user-info">
+<a href="/ward-manager">
     <h1 class="text-5xl font-bold text-center mt-5">病棟管理者</h1>
 </a>
 <div class="container mx-auto px-4">
@@ -53,7 +53,7 @@
                                 <?php endif; ?>
                             </td>
                             <td class="px-5 py-2 border-r whitespace-nowrap">
-                                <button class="bg-transparent hover:bg-sky-300 text-sky-600 font-semibold hover:text-white py-2 px-4 border border-sky-500 hover:border-transparent rounded wardControlBtn" data-id="<?= $user->id ?>">
+                                <button type="button" class="bg-transparent hover:bg-sky-300 text-sky-600 font-semibold hover:text-white py-2 px-4 border border-sky-500 hover:border-transparent rounded wardControlBtn"  data-id="<?= $user->id ?>">
                                     病棟管理
                                 </button>
                             </td>
@@ -67,9 +67,10 @@
         <div class="ward-modal bg-white p-8 rounded-lg shadow-lg max-w-md w-full">
             <span class="close cursor-pointer text-gray-600 absolute top-4 right-4 text-2xl">&times;</span>
             <h2 class="text-2xl mb-4 text-center font-semibold">管理病棟修正</h2>
-            <form id="updateWardForm" class="space-y-4">
-            @csrf
-                <input type="hidden" name="user_id" id="user_id">
+            <!-- <form id="updateWardForm" class="space-y-4"> -->
+            <?= $this->Form->create(null, ['id' => 'updateWardForm', 'class' => 'space-y-4']) ?>
+            <?= $this->Form->hidden('user_id', ['id' => 'user_id']) ?>
+                <!-- <input type="hidden" name="user_id" id="user_id"> -->
                 <hr class="mt-2 border-sky-100">
                     <div id="userNameDisplay" class="text-lg text-gray-700 font-medium text-center">
                     </div>
@@ -98,7 +99,6 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="flex items-center border-2 border-sky-100 rounded p-2 mt-4">
                     <input id="updateWard" type="checkbox" name="updateWard" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500" autocompleted>
                     <label for="updateWard" class="ml-2 text-sm text-gray-900">
@@ -113,7 +113,7 @@
                         変更
                     </button>
                 </div>
-            </form>
+            <?= $this->Form->end() ?>
         </div>
     </div>
 </div>
@@ -126,25 +126,37 @@
         const updateWardForm = document.getElementById('updateWardForm');
         
         wardControlButtons.forEach(button => {
+
             button.addEventListener('click', function () {
                 const userId = this.getAttribute('data-id');
-                const userName = this.getAttribute('data-name');
+                //const userName = this.getAttribute('data-name');
                 
                 document.getElementById('user_id').value = userId;
-                document.getElementById('userNameDisplay').textContent = userName;
+                //document.getElementById('userNameDisplay').textContent = userName;
 
-                fetch(`/users/get-ward-manager/${userId}`)
-                    .then(response => response.json())
-                    .then(data => {
+                console.log(`Requesting ward manager data for user ID: ${userId}`);
+                console.log(`Request URL: /ward-manager/${userId}`);
+
+                $.ajax({
+                    url: `/ward-manager/${userId}`,
+                    type: 'GET',
+                    success: function (data) {
+                        console.log('Ward manager data:', data);
                         const wardCodes = data.ward_codes;
                         document.querySelectorAll('input[name="ward_code[]"]').forEach(checkbox => {
                             checkbox.checked = wardCodes.includes(checkbox.value);
                         });
-                    });
-                
-                updateWardModal.style.display = 'flex';
-            });
+                        updateWardModal.style.display = 'flex'; 
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.error('Error status:', jqXHR.status);
+                        console.error('Error text:', textStatus);
+                        console.error('Error thrown:', errorThrown);
+                        alert('病棟管理情報を取得できませんでした。: ' + textStatus);
+                    }
+            });    
         });
+    });
 
         closeModalBtn.addEventListener('click', function () {
             updateWardModal.style.display = 'none';
@@ -156,39 +168,33 @@
 
         updateWardForm.addEventListener('submit', function (event) {
             event.preventDefault();
-
             const userId = document.getElementById('user_id').value;
             const wardCodes = Array.from(document.querySelectorAll('input[name="ward_code[]"]:checked')).map(cb => cb.value);
 
-            fetch(`/users/update-ward/${userId}`, {
-                method: 'POST',
+            $.ajax({
+                url: `/ward-update/${userId}`,
+                type: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-Token': '<?= $this->request->getAttribute('_csrfToken') ?>'
                 },
-                body: JSON.stringify({ ward_codes: wardCodes })
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(data => {
+                data: JSON.stringify({ ward_codes: wardCodes }),
+                success: function(data) {
                     if (data.success) {
                         alert('病棟が正常に更新されました。');
                         location.reload();
                     } else {
                         alert('更新できませんでした。: ' + data.message);
                     }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('更新できませんでした。: ' + error.message);
-                });
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.error('Error:', textStatus, errorThrown);
+                    alert('更新できませんでした。: ' + textStatus);
+                }
             });
         });
-    document.getElementById('updateWard').addEventListener('change', function() {
+        document.getElementById('updateWard').addEventListener('change', function() {
         document.getElementById('updateWardBtn').disabled = !this.checked;
     });
+});
 </script>
