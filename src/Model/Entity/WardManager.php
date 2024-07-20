@@ -29,6 +29,7 @@ class WardManager extends Entity
      * @var array<string, bool>
      */
     protected $_accessible = [
+        'id' => true,
         'user_id' => true,
         'ward_code' => true,
         'creator_id' => true,

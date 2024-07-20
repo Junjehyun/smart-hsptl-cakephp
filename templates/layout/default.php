@@ -36,8 +36,7 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <!--google fonts-->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@100&family=Yomogi&family=Zen+Maru+Gothic:wght@300&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300&display=swap" rel="stylesheet">
     <!-- Font Awesome CDN -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
     
@@ -56,10 +55,10 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <?= $this->fetch('script') ?>
     <style>
         body {
-            font-family: 'Zen Maru Gothic', sans-serif;
+            font-family: 'Kiwi Maru', sans-serif;
         }
-        h1 {
-            font-family: 'Zen Maru Gothic', sans-serif;
+        h1, h2, h3 {
+            font-family: 'Kiwi Maru', sans-serif;
         }
     </style>
     <script>

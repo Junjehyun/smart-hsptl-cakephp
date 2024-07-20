@@ -14,6 +14,11 @@ use Cake\ORM\TableRegistry;
 class QrCodeController extends AppController
 {
 
+    /**
+     * 初期化宣言
+     * 
+     * @return void
+     */
     public function initialize(): void
     {
         parent::initialize();
@@ -27,11 +32,26 @@ class QrCodeController extends AppController
      */
     public function index()
     {
+
     }
 
+    /**
+     * QRコード登録ロジック
+     *
+     * @return \Cake\Http\Response|null|void Renders view
+     * @throws NotFoundException
+     * @throws \Exception
+     * @throws \InvalidArgumentException
+     * @throws \RuntimeException
+     * @throws \TypeError
+     * @throws \Cake\Http\Exception\MethodNotAllowedException
+     * @throws \Cake\Http\Exception\NotFoundException
+     * @throws \Cake\Http\Exception\BadRequestException
+     */
     public function saveQrCode() {
         
         if ($this->request->is('post')) {
+
             $data = $this->request->getData();
 
             $smartTagsTable = TableRegistry::getTableLocator()->get('SmartTags');
@@ -48,6 +68,11 @@ class QrCodeController extends AppController
         throw new NotFoundException('Invalid request method');
     }
 
+    /**
+     * validation検証
+     * @param mixed $data
+     * @return string[]
+     */
     private function validateQrData($data)
     {
         $errors = [];

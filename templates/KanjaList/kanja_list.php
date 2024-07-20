@@ -1,6 +1,6 @@
 <?php $this->assign('title', '患者一覧'); ?>
 <a href="/kanjaList">
-    <h1 class="text-5xl font-bold text-center mt-5">患者検索</h1>
+    <h1 class="text-5xl font-semi-bold text-center mt-5">患者検索</h1>
 </a>
 <div class="container flex justify-center max-w-8xl p-5 py-8">
     <div class="bg-white p-6 rounded-lg shadow space-y-3 w-full">
@@ -9,14 +9,14 @@
             <div class="overflow-x-auto mt-6 mx-5">
                 <div class="flex items-center mb-5 space-x-3">
                     <input name="searchKanja" type="text" class="rounded placeholder-gray-300 h-15 p-2" placeholder="氏名または患者番号を検索" value="<?= h($searchKanja ?? '') ?>">
-                    <button type="submit" class="bg-sky-400 hover:bg-sky-600 text-white font-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
+                    <button type="submit" class="bg-sky-400 hover:bg-sky-600 text-white font-semi-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
                         検索
                     </button>
                 </div>
             </div> 
         </form>
             <a href="/kanjaCreate">
-                <button type="button" class="border-none bg-sky-400 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-15">
+                <button type="button" class="border-none bg-sky-400 hover:bg-sky-600 text-white font-semi-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-15">
                     患者登録
                 </button>
             </a>
@@ -103,7 +103,7 @@
                             </td>
                             <td class="px-5 py-2 text-center">
                                 <a href="<?= $this->Url->build(['controller' => 'KanjaList', 'action' => 'kanjaEdit', $customer->customer_no]) ?>">
-                                    <button type="button" class="bg-sky-400 hover:bg-sky-600 text-white font-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
+                                    <button type="button" class="bg-sky-400 hover:bg-sky-600 text-white font-semi-bold h-15 py-2 px-4 rounded focus:outline-none focus:shadow-outline border-none">
                                         修正
                                     </button>
                                 </a>

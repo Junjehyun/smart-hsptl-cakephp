@@ -8,7 +8,7 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        jp: ['Zen Maru Gothic', 'sans-serif'], // 日本語フォント
+        jp: ['Kiwi Maru', 'Noto Sans Japanese', 'sans-serif'], // 日本語フォント
       },
     },
   },

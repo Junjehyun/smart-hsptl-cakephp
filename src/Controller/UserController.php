@@ -9,6 +9,8 @@ use Cake\I18n\FrozenTime;
 use Cake\Datasource\ConnectionManager;
 use Cake\Http\Exception\BadRequestException;
 use Cake\Http\Exception\NotFoundException;
+use Cake\Log\Log;
+
 /**
  * User Controller
  *
@@ -47,10 +49,15 @@ class UserController extends AppController
      * 初期化メソッド
      * @return void
      */
-    public function initialize(): void
-    {
+    public function initialize(): void  {
+
         parent::initialize();
         $this->loadComponent('Paginator');
+
+        /**
+         *  Users, WardManagers テーブルロード
+         * 
+        */
         $this->Users = TableRegistry::getTableLocator()->get('Users');
         $this->WardManagers = TableRegistry::getTableLocator()->get('WardManagers');
     }
@@ -178,14 +185,33 @@ class UserController extends AppController
             'limit' => 10
         ]);
 
-        // 病棟管理者表示
+        // 病棟情報をユーザー情報にマージ
+        $mergedUsers = [];
         foreach ($users as $user) {
             if (!empty($user->ward_manager)) {
-                $user->ward_managers = [$user->ward_manager];
-            } else {
-                $user->ward_managers = [];
+                if (!isset($mergedUsers[$user->id])) {
+                    $mergedUsers[$user->id] = [
+                        'id' => $user->id,
+                        'name' => $user->name,
+                        'email' => $user->email,
+                        'department' => $user->department,
+                        'ward_managers' => []
+                    ];
+                }
+                $mergedUsers[$user->id]['ward_managers'][] = $user->ward_manager;
             }
         }
+        // Sort
+        foreach ($mergedUsers as &$user) {
+            usort($user['ward_managers'], function($a, $b) {
+                return $a->ward_code <=> $b->ward_code;
+            });
+        }
+
+        // マージしたユーザー情報をオブジェクトに変換
+        $mergedUsers = array_map(function($user) {
+            return (object) $user;
+        }, array_values($mergedUsers));
 
         // 部署表示
         $departmentsTable = TableRegistry::getTableLocator()->get('Masters');
@@ -194,40 +220,63 @@ class UserController extends AppController
             'valueField' => 'item_name'
         ])->where(['master_key' => '007'])->toArray();
 
-        $this->set(compact('users'));
+        $this->set(compact('mergedUsers', 'departments'));
         $this->set('userTypes', $this->userTypes);
-        $this->set('departments', $departments);
     }
 
-    public function updateWard($id)
+    /**
+     * 病棟アップデート処理するメソッド
+     * 
+     * @param mixed $id
+     * @return void
+     * @throws \Cake\Http\Exception\NotFoundException
+     */
+    public function wardUpdate($id)
     {
-        if ($this->request->is(['post'])) {
+        // メソッドがPOSTであるかどうかを確認
+        if ($this->request->is('post')) {
+            // ward_codeパラメターを取得
             $wardCodes = $this->request->getData('ward_code', []);
-            try {
-                $this->WardManager->deleteAll(['user_id' => $id, 'ward_code NOT IN' => $wardCodes]);
+            // wardUpdateメソッドが呼び出されたことをログに記録
+            Log::info('wardUpdate called: user_id=' . $id . ', ward_codes=' . json_encode($wardCodes));
 
-                foreach ($wardCodes as $wardCode) {
-                    $ward = $this->WardManager->find()
-                        ->where(['user_id' => $id, 'ward_codes' => $wardCode])
-                        ->first();
+            // ward_codeが空いてない場合、user_idに関連するすべての病棟データを削除
+            if (!empty($wardCodes)) {
+                $this->WardManagers->deleteAll(['user_id' => $id, 'ward_code NOT IN' => $wardCodes]);
+                Log::write('info', 'Deleted wards for user_id=' . $id . ', not in ward_codes=' . json_encode($wardCodes));
+            } else {
+                // ward_codeがあいてる場合、user_idに関連するすべての病棟データを削除
+                $this->WardManagers->deleteAll(['user_id' => $id]);
+                Log::write('info', 'Deleted all wards for user_id=' . $id);
+            }
 
-                    if (!$ward) {
-                        $ward = $this->WardManager->newEntity(['user_id' => $id, 'ward_code' => $wardCode, 'creator_id' => $this->Auth->user('id')]);
-                    }
-
-                    $this->WardManager->save($ward);
+            // ward_codeをループして、新しい病棟データを保存
+            foreach ($wardCodes as $wardCode) {
+                // user_idとward_codeに関連する病棟データを取得
+                $ward = $this->WardManagers->find()->where(['user_id' => $id, 'ward_code' => $wardCode])->first();
+                // wardがない場合、新しいwardを作成して保存
+                if (!$ward) {
+                    $existingWard = $this->WardManagers->find()->where(['user_id' => $id])->first();
+                    $createdAt = $existingWard ? $existingWard->created_at : date('Y-m-d H:i:s');
+                    $ward = $this->WardManagers->newEntity([
+                        'user_id' => $id,
+                        'ward_code' => $wardCode,
+                        'creator_id' => $existingWard ? $existingWard->creator_id : rand(1, 1000),
+                        'created_at' => $createdAt
+                    ]);
+                } else {
+                    $ward->updated_at = date('Y-m-d H:i:s');
+                    Log::write('info', 'Existing ward updated for user_id=' . $id . ', ward_code=' . $wardCode);
                 }
-                $this->response = $this->response->withType('application/json')
-                        ->withStringBody(json_encode(['success' => true]));
-                    return $this->response;
-                } catch (\Exception $e) {
-                    $this->response = $this->response->withType('application/json')
-                        ->withStringBody(json_encode(['success' => false, 'message' => '病棟更新中エラーが発生しました。', 'error' => $e->getMessage()]))
-                        ->withStatus(500);
-                    return $this->response;
-                }
+                $this->WardManagers->save($ward);
+                Log::write('info', 'New ward save for user_id=' . $id . ', ward_code=' . $wardCode);
+            }
+            // wardUpdateメソッドが正常に完了したことをログに記録
+            Log::write('info', 'wardUpdate completed successfully for user_id=' . $id . ', ward_code=' . $wardCode);
+            return $this->response->withType('application/json')->withStringBody(json_encode(['success' => true]));
         } else {
-            throw new BadRequestException('Invalid request method');
+            // メソッドがPOSTでない場合、BadRequestExceptionをスロー
+            throw new BadRequestException('invalid request method');
         }
     }
 

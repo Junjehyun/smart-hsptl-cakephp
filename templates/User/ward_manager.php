@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php foreach ($users as $index => $user) : ?>
+                    <?php foreach ($mergedUsers as $index => $user) : ?>
                         <tr class="hover:bg-gray-50 border-b">
                             <td class="px-5 py-2 border-r whitespace-nowrap">
                                 <?= $index + 1 ?>
@@ -49,7 +49,7 @@
                                         <?= h($ward->ward_code) ?><br>
                                     <?php endforeach; ?>
                                 <?php else: ?>
-                                    <span>担当病棟なし</span>
+                                    <span></span>
                                 <?php endif; ?>
                             </td>
                             <td class="px-5 py-2 border-r whitespace-nowrap">
@@ -124,36 +124,31 @@
         const updateCancelBtn = document.getElementById('updateCancelBtn');
         const closeModalBtn = document.querySelector('.close');
         const updateWardForm = document.getElementById('updateWardForm');
-        
+        const wardManagerUrl = <?= json_encode($this->Url->build(['action' => 'getWardManager', '_full' => true])) ?>;
+        const wardUpdateUrl = <?= json_encode($this->Url->build(['action' => 'wardUpdate', '_full' => true])) ?>;
+
         wardControlButtons.forEach(button => {
 
             button.addEventListener('click', function () {
                 const userId = this.getAttribute('data-id');
-                //const userName = this.getAttribute('data-name');
                 
                 document.getElementById('user_id').value = userId;
-                //document.getElementById('userNameDisplay').textContent = userName;
 
-                console.log(`Requesting ward manager data for user ID: ${userId}`);
-                console.log(`Request URL: /ward-manager/${userId}`);
-
-                $.ajax({
-                    url: `/ward-manager/${userId}`,
-                    type: 'GET',
-                    success: function (data) {
-                        console.log('Ward manager data:', data);
-                        const wardCodes = data.ward_codes;
-                        document.querySelectorAll('input[name="ward_code[]"]').forEach(checkbox => {
-                            checkbox.checked = wardCodes.includes(checkbox.value);
-                        });
-                        updateWardModal.style.display = 'flex'; 
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        console.error('Error status:', jqXHR.status);
-                        console.error('Error text:', textStatus);
-                        console.error('Error thrown:', errorThrown);
-                        alert('病棟管理情報を取得できませんでした。: ' + textStatus);
-                    }
+            //病棟管理モーダル表示ロジック
+            $.ajax({
+                url: wardManagerUrl + '/' + userId,
+                type: 'GET',
+                datatype: 'json',
+                success: function (data) {
+                    const wardCodes = data.ward_codes;
+                    document.querySelectorAll('input[name="ward_code[]"]').forEach(checkbox => {
+                        checkbox.checked = wardCodes.includes(checkbox.value);
+                    });
+                    updateWardModal.style.display = 'flex'; 
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('病棟管理情報を取得できませんでした。: ' + textStatus);
+                }
             });    
         });
     });
@@ -171,17 +166,21 @@
             const userId = document.getElementById('user_id').value;
             const wardCodes = Array.from(document.querySelectorAll('input[name="ward_code[]"]:checked')).map(cb => cb.value);
 
+            console.log(wardCodes);
+
             $.ajax({
-                url: `/ward-update/${userId}`,
+                url: wardUpdateUrl + '/' + userId,
                 type: 'POST',
+                datatype: 'json',
+                contentType: 'application/json',
+                data: JSON.stringify({ ward_code: wardCodes }),
                 headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-Token': '<?= $this->request->getAttribute('_csrfToken') ?>'
+                    'X-CSRF-Token': <?= json_encode($this->request->getAttribute('csrfToken')); ?>,
                 },
-                data: JSON.stringify({ ward_codes: wardCodes }),
                 success: function(data) {
+                    console.log(data);
                     if (data.success) {
-                        alert('病棟が正常に更新されました。');
+                        alert('病棟が正常に更新されました。 정상처리');
                         location.reload();
                     } else {
                         alert('更新できませんでした。: ' + data.message);
