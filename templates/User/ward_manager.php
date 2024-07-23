@@ -5,25 +5,25 @@
 <div class="container mx-auto px-4">
     <div class="flex justify-center mt-8">
         <div class="bg-white p-6 rounded-lg shadow space-y-3 w-full">
-            <table class="min-w-full leading-normal rounded-lg shadow">
+            <table id="values-table" class="min-w-full leading-normal rounded-lg shadow">
                 <thead>
                     <tr class="bg-gray-100 border-b-2 border-gray-300">
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-xl font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             No
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-xl font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             氏名
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-xl font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             Eメール
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-xl font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             部署
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-xl font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             病棟
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-xl font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             処理
                         </th>
                     </tr>
@@ -31,19 +31,19 @@
                 <tbody>
                     <?php foreach ($mergedUsers as $index => $user) : ?>
                         <tr class="hover:bg-gray-50 border-b">
-                            <td class="px-5 py-2 border-r whitespace-nowrap">
+                            <td class="px-5 py-2 border-r whitespace-nowrap text-xl">
                                 <?= $index + 1 ?>
                             </td>
-                            <td class="px-5 py-2 border-r whitespace-nowrap">
+                            <td class="px-5 py-2 border-r whitespace-nowrap text-xl">
                                 <?= h($user->name) ?>
                             </td>
-                            <td class="px-5 py-2 border-r whitespace-nowrap">
+                            <td class="px-5 py-2 border-r whitespace-nowrap text-xl">
                                 <?= h($user->email) ?>
                             </td>
-                            <td class="px-5 py-2 border-r whitespace-nowrap">
+                            <td class="px-5 py-2 border-r whitespace-nowrap text-xl">
                                 <?= h($departments[$user->department] ?? '') ?>
                             </td>
-                            <td class="px-5 py-2 border-r whitespace-nowrap">
+                            <td class="px-5 py-2 border-r whitespace-nowrap text-xl">
                                 <?php if (!empty($user->ward_managers)): ?>
                                     <?php foreach ($user->ward_managers as $ward): ?>
                                         <?= h($ward->ward_code) ?><br>

@@ -30,7 +30,6 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
     <!--HTML5 QR Reader-->
     <script src="https://cdn.jsdelivr.net/npm/html5-qrcode/minified/html5-qrcode.min.js"></script>
     <!-- jQuery CDN -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     
     <!--google fonts-->
@@ -60,6 +59,55 @@ $cakeDescription = 'CakePHP: the rapid development php framework';
         h1, h2, h3 {
             font-family: 'Kiwi Maru', sans-serif;
         }
+        /* 640px以下のテーブル処理 */
+        @media (max-width: 640px) {
+            #values-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            #values-table thead, #values-table tbody, #values-table th, #values-table td, #values-table tr {
+                display: block;
+            }
+
+            #values-table thead {
+                float: none;
+                width: 100%;
+            }
+
+            #values-table tbody {
+                display: block;
+                width: 100%;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            #values-table td, #values-table th {
+                display: inline-block;
+                white-space: nowrap;
+            }
+        }
+
+        @media (max-width: 640px) {
+
+        #values-table thead {
+            flex: 0 0 auto;
+        }
+        #values-table tbody {
+            display: flex;
+            flex-direction: column;
+            flex: 1 1 auto;
+        }
+        #values-table tr {
+            display: flex;
+            flex: 0 0 auto;
+        }
+        #values-table th, #values-table td {
+            flex: 1 1 auto;
+            white-space: nowrap;
+        }
+    }
     </style>
     <script>
         setTimeout(function() {

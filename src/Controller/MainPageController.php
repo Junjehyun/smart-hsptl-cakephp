@@ -41,6 +41,10 @@ class MainPageController extends AppController
         $this->set(compact('mainPage'));
     }
 
+    public function test() {
+        // css responsive test
+    }
+
     /**
      * Add method
      *

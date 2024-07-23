@@ -67,6 +67,7 @@ return function (RouteBuilder $routes): void {
          * 
          */
         $builder->connect('/index', ['controller' => 'MainPage', 'action' => 'index'])->setMethods(['GET']);
+        $builder->connect('/test', ['controller' => 'MainPage', 'action' => 'test'])->setMethods(['GET']);
 
         /**
          * 患者一覧画面を表示するルーター設定

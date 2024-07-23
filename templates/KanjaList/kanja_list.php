@@ -21,7 +21,7 @@
                 </button>
             </a>
             <div class="w-full">
-                <table class="min-w-full leading-loose rounded-lg shadow">
+                <table id="values-table" class="min-w-full leading-loose rounded-lg shadow">
                     <thead>
                         <tr class="bg-gray-100 border-b-2 border-gray-300">
                             <th class="px-5 py-3 bg-sky-50 text-center text-m text-gray-600 tracking-tighter whitespace-nowrap">
@@ -115,9 +115,9 @@
                 <div class="paginator mt-3">
                     <ul class="pagination justify-content-center">
                         <li class="page-item"><?= $this->Paginator->first('<< ' . __('最初')) ?></li>
-                        <li class="page-item"><?= $this->Paginator->prev('< ' . __('前へ')) ?></li>
+                        <li class="page-item"><?= $this->Paginator->prev('< ' . __('前')) ?></li>
                         <?= $this->Paginator->numbers(['class' => 'page-item', 'tag' => 'li']) ?>
-                        <li class="page-item"><?= $this->Paginator->next(__('次へ') . ' >') ?></li>
+                        <li class="page-item"><?= $this->Paginator->next(__('次') . ' >') ?></li>
                         <li class="page-item"><?= $this->Paginator->last(__('最後') . ' >>') ?></li>
                     </ul>
                 </div>

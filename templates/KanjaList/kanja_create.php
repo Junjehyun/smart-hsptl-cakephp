@@ -3,17 +3,17 @@
     <h1 class="text-5xl font-semi-bold text-center mt-5">患者新規登録</h1>
 </a>
 <?= $this->Form->create(null, ['url' => ['action' => 'kanjaCreate']]) ?>
-    <div class="container mx-auto max-w-6xl flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-5">
+    <div class="container mx-auto max-w-7xl flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 mt-5">
         <!-- 個人情報Section -->
-        <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow">
+        <div class="w-full md:w-1/2 bg-zinc-50 p-5 rounded-lg shadow">
             <h2 class="text-2xl font-semi-bold mb-4">患者情報</h2>   
-            <hr class="my-4 border-sky-100">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <hr class="my-4 border-zinc-200">
+            <div class="sm:grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">氏名 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">氏名 <span class="text-red-500">必須</span></label>
                     <?= $this->Form->control('name', [
                         'label' => false,
-                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-2xl',
+                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 text-2xl focus:ring-blue-400',
                         'placeholder' => '氏名',
                         'value' => $data['name'] ?? ''
                     ]) ?>
@@ -24,13 +24,13 @@
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">生年月日 <span class="text-red-500">必須</span></label>
-                    <div class="flex space-x-2">
-                        <select id="year" name="birth_year" class="text-2xl border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-1/3" style="width: 100%">
+                    <label class="mb-1 text-xl text-gray-600">生年月日 <span class="text-red-500">必須</span></label>
+                    <div class="flex space-x-3">
+                        <select id="year" name="birth_year" class="border rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl w-1/3 style="width: 100%">
                         </select>
-                        <select id="month" name="birth_month" class="text-2xl border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-1/4" style="width: 100%">
+                        <select id="month" name="birth_month" class="border rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl w-1/4 style="width: 100%">
                         </select>
-                        <select id="day" name="birth_day" class="text-2xl border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 w-1/4" style="width: 100%">
+                        <select id="day" name="birth_day" class="border rounded p-1 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl w-1/4 style="width: 100%">
                         </select>
                     </div>
                     <?php if (!empty($errors['birthdate'])): ?>  
@@ -40,7 +40,7 @@
                     <?php endif; ?>  
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">性別 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">性別 <span class="text-red-500">必須</span></label>
                     <div class="flex space-x-4">
                         <label class="inline-flex items-center text-2xl">
                             <input type="radio" name="sex" value="M" class="form-radio" <?= isset($data['sex']) && $data['sex'] === 'M' ? 'checked' : '' ?>>
@@ -58,11 +58,11 @@
                     </div>
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">入院日付 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">入院日付 <span class="text-red-500">必須</span></label>
                     <?= $this->Form->control('hospitalized_date', [
                         'label' => false,
                         'type' => 'date',
-                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-2xl',
+                        'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl',
                         'placeholder' => '入院日選択(YYYY-MM-DD)',
                         'value' => $data['hospitalized_date'] ?? ''
                     ]) ?>
@@ -72,8 +72,8 @@
                         <?php endforeach; ?>
                     <?php endif; ?>
                 </div>
-                <div class=""flex flex-col>
-                    <label class="mb-1 text-lg text-gray-600">血液型 <span class="text-red-500">必須</span></label>
+                <div class="flex flex-col">
+                    <label class="mb-1 text-xl text-gray-600">血液型 <span class="text-red-500">必須</span></label>
                     <select name="blood_type" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" required>
                         <option>※選択して下さい</option>
                         <?php foreach ($bloodTypes as $bloodType): ?>
@@ -89,7 +89,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">電話番号 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">電話番号 <span class="text-red-500">必須</span></label>
                     <?= $this->Form->control('telephone', [
                         'label' => false,
                         'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-2xl',
@@ -103,18 +103,18 @@
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col col-span-2">
-                    <label class="mb-1 text-lg text-gray-600">住所</label>
+                    <label class="mb-1 text-xl text-gray-600">住所</label>
                     <input name="address" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-2xl" type="text" placeholder="住所">
                 </div>
             </div>
         </div>
         <!-- 診療情報Section -->
-        <div class="w-full md:w-1/2 bg-white p-6 rounded-lg shadow">
+        <div class="w-full md:w-1/2 bg-zinc-50 p-5 rounded-lg shadow">
             <h2 class="text-2xl font-semi-bold mb-4">診療情報</h2>
-            <hr class="my-4 border-sky-100">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <hr class="my-4 border-zinc-200">
+            <div class="sm:grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">診療科 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">診療科 <span class="text-red-500">必須</span></label>
                     <select name="department" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" required>
                         <option>※選択して下さい</option>
                         <?php foreach ($departments as $department): ?>
@@ -130,7 +130,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">担当医名 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">担当医名 <span class="text-red-500">必須</span></label>
                     <?= $this->Form->control('doctor_name', [
                         'label' => false,
                         'class' => 'border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-2xl',
@@ -144,7 +144,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">重症度 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">重症度 <span class="text-red-500">必須</span></label>
                     <select name="severity" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" required>
                         <option>※選択して下さい</option>
                         <?php foreach ($severities as $severity): ?>
@@ -160,7 +160,7 @@
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col">
-                    <label class="mb-1 text-lg text-gray-600">落傷 <span class="text-red-500">必須</span></label>
+                    <label class="mb-1 text-xl text-gray-600">落傷 <span class="text-red-500">必須</span></label>
                     <select name="fall" class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-xl" required>
                         <option>※選択して下さい</option>
                             <?php foreach ($falls as $fall): ?>
@@ -176,31 +176,31 @@
                     <?php endif; ?>
                 </div>
                 <div class="flex flex-col col-span-2">
-                    <label class="mb-1 text-lg text-gray-600">注意事項</label>
+                    <label class="mb-1 text-xl text-gray-600">注意事項</label>
                     <div class="flex space-x-4">
-                        <label class="inline-flex items-center text-2xl">
+                        <label class="inline-flex items-center text-xl">
                             <input type="checkbox" class="form-checkbox" name="blood_warn">
                             <span class="ml-2">血液</span>
                         </label>
-                        <label class="inline-flex items-center text-2xl">
+                        <label class="inline-flex items-center text-xl">
                             <input type="checkbox" class="form-checkbox" name="contact_warn">
                             <span class="ml-2">接触主義</span>
                         </label>
-                        <label class="inline-flex items-center text-2xl">
+                        <label class="inline-flex items-center text-xl">
                             <input type="checkbox" class="form-checkbox" name="air_warn">
                             <span class="ml-2">空気注意</span>
                         </label>
                     </div>
                 </div>
                 <div class="flex flex-col col-span-2">
-                    <label class="mb-1 text-lg text-gray-600">重要事項</label>
+                    <label class="mb-1 text-xl text-gray-600">重要事項</label>
                     <textarea class="border rounded p-2 focus:outline-none focus:ring-2 focus:ring-blue-400 text-2xl" placeholder="重要事項" name="remarks"><?= $data['remarks'] ?? '' ?></textarea>
                 </div>
             </div>
         </div>
     </div>
-    <div class="w-full flex justify-end mt-4">
-        <?= $this->Form->button(__('登録する'), ['class' => 'bg-sky-400 hover:bg-blue-900 text-white font-semi-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-15 border-none']) ?>
+    <div class="mx-auto max-w-7xl p-6 flex justify-end mt-5">
+        <?= $this->Form->button(__('登録する'), ['class' => 'bg-sky-400 hover:bg-sky-600 text-white font-semi-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline h-15 border-none']) ?>
     </div>
 <?= $this->Form->end() ?>
 <script>
@@ -249,20 +249,16 @@
                 daySelect.appendChild(option);
             }
         }
-
         // 初期日を設定
         fillDays(currentYear, 1);
-
         // 年が変更されたら日数を更新
         yearSelect.addEventListener('change', function() {
             fillDays(yearSelect.value, monthSelect.value);
         });
-
         // 月が変更されたら日数を更新
         monthSelect.addEventListener('change', function() {
             fillDays(yearSelect.value, monthSelect.value);
         });
-
         //カレンダーのOption
         const dateInput = document.getElementById('hospital_date');
                 hospital_date.addEventListener('focus', (e) => {
@@ -273,11 +269,9 @@
                 dateInput.type = 'text';
                 dateInput.placeholder = "入院日選択(YYYY-MM-DD)";
         });
-
         // 入力値を残す
         if (birthYear) yearSelect.value = birthYear;
         if (birthMonth) monthSelect.value = birthMonth;
         if (birthDay) daySelect.value = birthDay;
-
     });
 </script>

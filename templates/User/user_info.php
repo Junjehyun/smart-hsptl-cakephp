@@ -5,28 +5,28 @@
 <div class="container mx-auto px-4">
     <div class="flex justify-center mt-8">
         <div class="bg-white p-6 rounded-lg shadow space-y-3 w-full">
-            <table class="min-w-full leading-normal rounded-lg shadow">
+            <table id="values-table" class="min-w-full leading-normal rounded-lg shadow">
                 <thead>
                     <tr class="bg-gray-100 border-b-2 border-gray-300">
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-2xl font-semi-bold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             No
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-2xl font-semi-bold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             氏名
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-2xl font-semi-bold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             Eメール
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-2xl font-semi-bold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             部署
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-2xl font-semi-bold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             ユーザー区分
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-2xl font-semi-bold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             ステータス
                         </th>
-                        <th class="px-5 py-3 bg-sky-50 text-left text-sm font-semibold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
+                        <th class="px-5 py-3 bg-sky-50 text-left text-2xl font-semi-bold text-gray-600 uppercase tracking-tighter whitespace-nowrap">
                             処理
                         </th>
                     </tr>
@@ -59,7 +59,7 @@
                                 <?php if ($user->isOnline()): ?>
                                     <span class="bg-lime-300 text-gray-900 text-sm font-medium mr-2 px-2.5 py-1 rounded-full">ログイン中</span>
                                 <?php else: ?>
-                                    <span><?= $user->created_at ?></span>
+                                    <span><?= $user->created_at->i18nFormat('yyyyMMdd HH:mm') ?></span>
                                     <!--$user->last_activity_date넣어야됨 원래는.-->
                                 <?php endif; ?>
                             </td>

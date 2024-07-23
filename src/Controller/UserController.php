@@ -21,27 +21,27 @@ class UserController extends AppController
     private $userTypes = [
         '000' => [
             'name' => '承認待機',
-            'class' => 'bg-gray-300 text-gray-900 text-sm font-medium mr-2 px-2.5 py-1 rounded-full'
+            'class' => 'bg-gray-300 text-gray-900 text-2xl font-semi-bold mr-2 px-4 py-2 rounded-full'
         ],
         '777' => [
             'name' => 'スーパー管理者',
-            'class' => 'bg-pink-300 text-pink-900 text-sm font-medium mr-2 px-2.5 py-1 rounded-full'
+            'class' => 'bg-pink-300 text-pink-900 text-2xl font-semi-bold mr-2 px-4 py-2 rounded-full'
         ],
         '007' => [
             'name' => '管理者',
-            'class' => 'bg-sky-300 text-sky-900 text-sm font-medium mr-2 px-2.5 py-1 rounded-full'
+            'class' => 'bg-sky-300 text-sky-900 text-2xl font-semi-bold mr-2 px-4 py-2 rounded-full'
         ],
         '005' => [
             'name' => '病棟管理者',
-            'class' => 'bg-green-300 text-green-900 text-sm font-medium mr-2 px-2.5 py-1 rounded-full'
+            'class' => 'bg-green-300 text-green-900 text-2xl font-semi-bold mr-2 px-4 py-2 rounded-full'
         ],
         '001' => [
             'name' => 'スタッフ',
-            'class' => 'bg-indigo-300 text-indigo-900 text-sm font-medium mr-2 px-2.5 py-1 rounded-full'
+            'class' => 'bg-indigo-300 text-indigo-900 text-2xl font-semi-bold mr-2 px-4 py-2 rounded-full'
         ],
         '009' => [
             'name' => '非承認',
-            'class' => 'bg-orange-300 text-orange-900 text-sm font-medium mr-2 px-2.5 py-1 rounded-full'
+            'class' => 'bg-orange-300 text-orange-900 text-2xl font-semi-bold mr-2 px-4 py-2 rounded-full'
         ],
     ];
 
